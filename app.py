@@ -43,6 +43,21 @@ def foo(data): # data is whatever arg you pass in your emit call on client
     print(data)
     socketio.emit('newboard',  data, broadcast=True, include_self=False)
 # Note that we don't call app.run anymore. We call socketio.run with app arg
+@socketio.on('login')
+def foo1(data): # data is whatever arg you pass in your emit call on client
+    print(data)
+    socketio.emit('newlogin',  data, broadcast=True, include_self=False)
+# Note that we don't call app.run anymore. We call socketio.run with app arg
+@socketio.on('message')
+def foo2(data): # data is whatever arg you pass in your emit call on client
+    print(data)
+    socketio.emit('newmessage',  data, broadcast=True, include_self=False)
+# Note that we don't call app.run anymore. We call socketio.run with app arg
+@socketio.on('turn')
+def foo3(data): # data is whatever arg you pass in your emit call on client
+    print(data)
+    socketio.emit('newturn',  data, broadcast=True, include_self=False)
+# Note that we don't call app.run anymore. We call socketio.run with app arg
 
 @socketio.on('clientid')
 def goo(data):

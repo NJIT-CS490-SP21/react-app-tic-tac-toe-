@@ -15,7 +15,8 @@ function App() {
   const [isShown, setshown] = useState(true);
   const [tchat2, updatetchat] = useState([]);
   const email=useRef(null);
-   const tchat=useRef(null);
+  const tchat=useRef(null);
+  const [turn, updateturn] = useState([]);
  
   
  
@@ -29,6 +30,30 @@ function App() {
       setBoard(newboard);
        
     }); 
+     socket.on('newmessage', (data) => {
+     
+      const newtchat=[...data.message];
+ 
+      updatetchat(newtchat);
+       
+    }); 
+    socket.on('newlogin', (data) => {
+     
+      const newlog=[...data.user];
+ 
+      updateuser(newlog);
+       
+    }); 
+    
+    socket.on('newturn', (data) => {
+     
+      const newturn=[...data.turn];
+ 
+      updateturn(newturn);
+       
+    }); 
+    
+    
     socket.on('connect', () => {
      const cid=socket.id;
      socket.emit('clientid', { cid: cid });
@@ -44,36 +69,54 @@ function App() {
     });
     
   }, []);
+console.log(myArray);
 
-//console.log(myArray);
 function onclick(index){
        
+       console.log(turn);
+       console.log(socket);
        const x=socket.id;
-       //console.log(x);
-      if (x==myArray[0][1]['cid'])
-     { 
+       
+       if (myArray.length>0)
+       {
+      if (x==myArray[0][0]['cid']&& turn[0]!=x)
+     {  
+     
       const newboard=[...board];
       
-       newboard[index]= "0" ;
+       newboard[index]= "x" ;
      
       setBoard(newboard);
       socket.emit('board', { index: index });
-      socket.emit('newboard', { board: newboard });}
+      socket.emit('newboard', { board: newboard });
       
-      else if (x==myArray[0][0]['cid'])
+      
+     }
+      
+      else if (x==myArray[0][1]['cid']&& turn[0]!=x)
      { 
-       
+        
       const new_board=[...board];
      
-       new_board[index]= "X" ;
+       new_board[index]= "O" ;
      
       setBoard(new_board);
       socket.emit('board', { index: index });
       socket.emit('newboard', { board: new_board });}
-      
+     
 }
+const newturn=[...turn];
+  newturn[0]=x;
+  updateturn(newturn);
+   socket.emit('turn', { turn: newturn });}
 
-  
+
+  function restart(){
+   
+   board.fill(null);
+  socket.emit('newboard', { board: board });
+   //onclick();
+  }
   function login ()
   {
    const email2 = email.current.value;
@@ -81,6 +124,8 @@ function onclick(index){
      
       newuser.push(email2);
       updateuser(newuser);
+    socket.emit('login', { user:newuser });
+    
      }
    
    
@@ -91,7 +136,12 @@ function onclick(index){
      
       newtchat.push(tchat1);
       updatetchat(newtchat);
+    socket.emit('message', { message:newtchat });
      }
+     
+     
+     
+     
    function showboard(){
     //login();
     setshown((prevShown)=>{
@@ -113,6 +163,7 @@ function onclick(index){
    <button onClick={()=>{login();}}> Log in</button> 
    <div class="user"> {user.map((item)=> { return <div>{item}</div>;})} </div>
    </div>
+   
    <div class="tchat">
    
    <input ref={tchat}  type= "text"/>
@@ -124,8 +175,12 @@ function onclick(index){
    <div class="board">
         
     {board.map((item,index) => <Board name={() => onclick(index)} value={item} />)}
-  
     </div>
+  
+    <div class="restart">
+     <button onClick={()=>{restart();}}> Restart</button> 
+     </div>
+     
    </div>
   );
 }
