@@ -1,0 +1,48 @@
+.board {
+	width: 300px; /* Total horizontal dimensions */
+	height: 300px; /* Total vertical dimensions */
+	display: grid; /* Enables CSS Grid */ 
+	grid-template-columns: repeat(3, 1fr); /* Total horizontal space broken into 3 columns */
+  grid-template-rows: repeat(3, 1fr); /* Total vertical space broken into 3 rows */
+  background-color: white;
+  grid-gap: 10px;
+  position: fixed; /* or absolute */
+  top: 30%;
+  left: 20%;
+   
+   
+}
+
+.box {
+  border: 1px solid black; /* Shows the lines in the CSS grid */
+  background-color: lightblue;
+  text-align: center;
+
+  font-size:40px ;
+  font-weight:bold;
+  
+}
+.login{
+    position: fixed; /* or absolute */
+  top: 20%;
+  left: 20%;
+   
+    
+    
+}
+.tchat{
+    position: fixed; /* or absolute */
+  top: 20%;
+  left: 55%;
+   
+    
+    
+}
+.user{
+    position: fixed; /* or absolute */
+  top: 30%;
+  left: 5%;
+   
+    
+    
+}
