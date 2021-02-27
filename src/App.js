@@ -21,7 +21,6 @@ function App() {
   
  
   
-  
   useEffect(() => {
      socket.on('newboard', (data) => {
      
@@ -71,10 +70,33 @@ function App() {
   }, []);
 console.log(myArray);
 
+
+
+
 function onclick(index){
+ 
+ 
+ function winner(board) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+      return board[a];
+    }
+  }
+  return null;
+}
        
-       console.log(turn);
-       console.log(socket);
+      if( winner(board) == null ){
        const x=socket.id;
        
        if (myArray.length>0)
@@ -108,7 +130,13 @@ function onclick(index){
 const newturn=[...turn];
   newturn[0]=x;
   updateturn(newturn);
-   socket.emit('turn', { turn: newturn });}
+   socket.emit('turn', { turn: newturn });
+       
+      }
+      else { console.log(winner(board));
+       
+      }
+      }
 
 
   function restart(){
