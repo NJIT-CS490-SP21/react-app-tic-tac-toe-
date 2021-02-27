@@ -17,6 +17,8 @@ function App() {
   const email=useRef(null);
   const tchat=useRef(null);
   const [turn, updateturn] = useState([]);
+  const [dict, updatedict] = useState({});
+  
  
   
  
@@ -133,7 +135,7 @@ const newturn=[...turn];
    socket.emit('turn', { turn: newturn });
        
       }
-      else { console.log(winner(board));
+      else { return(<div> winner(board) </div>);
        
       }
       }
@@ -180,36 +182,47 @@ const newturn=[...turn];
 
   return (
   <div>
-  <h> WELCOME TO THE GAME </h>
-  <div class="title">
-  <div> Users Connected </div>
+  <div class="title" >
+  <h1> WELCOME TO THE GAME </h1 >
   </div>
+  
+  <div class="user">
+  Users Connected 
+  </div>
+  <div class="tchat_box">
+  Chat Box!
+  </div>
+  
    <div class="login">
-   
-   <input ref={email}  type= "text"/>
-         
+   <input class="input1" ref={email}  type= "text"/>
    <button onClick={()=>{login();}}> Log in</button> 
-   <div class="user"> {user.map((item)=> { return <div>{item}</div>;})} </div>
+   <div class="list"> {user.map((item)=> { return <div>{item}</div>;})} </div>
    </div>
    
    <div class="tchat">
    
-   <input ref={tchat}  type= "text"/>
-         
+   <textarea ref={tchat} placeholder="Type message.." name="msg" required></textarea>
    <button onClick={()=>{tchatf();}}> Post</button> 
-  <div> {tchat2.map((item)=> { return <div>{item}</div>;})} </div>
+   {tchat2.map((item)=> { return <div>{item}</div>;})}
    </div>
+   
+  <div class="reset">
+   <button onClick={()=>{restart();}}> Restart</button> 
+   </div>
+   
+     
+     
+         
+   
    
    <div class="board">
         
     {board.map((item,index) => <Board name={() => onclick(index)} value={item} />)}
     </div>
   
-    <div class="restart">
-     <button onClick={()=>{restart();}}> Restart</button> 
-     </div>
+   </div> 
      
-   </div>
+   
   );
 }
 
