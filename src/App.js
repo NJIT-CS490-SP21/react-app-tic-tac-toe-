@@ -12,12 +12,13 @@ function App() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [myArray, updateMyArray] = useState([]);
   const [user, updateuser] = useState([]);
-  const [isShown, setshown] = useState(true);
+  const [isShown, setshown] = useState(false);
   const [tchat2, updatetchat] = useState([]);
   const email=useRef(null);
   const tchat=useRef(null);
   const [turn, updateturn] = useState([]);
   const [dict, updatedict] = useState({});
+  const win='';
   
  
   
@@ -69,8 +70,12 @@ function App() {
       
     });
     
+    socket.on('newdict', (data) => {
+    const newdict={...data.dict};
+    updatedict(newdict);    });
+    
   }, []);
-console.log(myArray);
+
 
 
 
@@ -92,15 +97,15 @@ function onclick(index){
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-      return board[a];
+      return (board[a]);
     }
   }
   return null;
 }
-       
+       //users can still play if there is no winner
       if( winner(board) == null ){
        const x=socket.id;
-       
+       //adding first connected user to list and assiging 'X"
        if (myArray.length>0)
        {
       if (x==myArray[0][0]['cid']&& turn[0]!=x)
@@ -116,7 +121,7 @@ function onclick(index){
       
       
      }
-      
+      //adding 2nd connected user to list and assiging 'O'
       else if (x==myArray[0][1]['cid']&& turn[0]!=x)
      { 
         
@@ -135,18 +140,22 @@ const newturn=[...turn];
    socket.emit('turn', { turn: newturn });
        
       }
-      else { return(<div> winner(board) </div>);
-       
-      }
+      
       }
 
-
+  //reset the board
   function restart(){
-   
+   if( socket.id == myArray[0][0]  ){
    board.fill(null);
+   }
+   if( socket.id == myArray[0][1]  ){
+   board.fill(null);
+   }
+  
   socket.emit('newboard', { board: board });
-   //onclick();
+   
   }
+  //to log in users
   function login ()
   {
    const email2 = email.current.value;
@@ -154,10 +163,16 @@ const newturn=[...turn];
      
       newuser.push(email2);
       updateuser(newuser);
+      
     socket.emit('login', { user:newuser });
+    const newdict={...dict};
+    newdict[socket.id]=email2;
+    updatedict(newdict);
+    console.log(newdict);
+    socket.emit('dict', { dict:newdict});
     
      }
-   
+   win=login();
    
   function tchatf ()
   {
@@ -173,7 +188,7 @@ const newturn=[...turn];
      
      
    function showboard(){
-    //login();
+    login();
     setshown((prevShown)=>{
      return !prevShown;
     });
@@ -185,46 +200,47 @@ const newturn=[...turn];
   <div class="title" >
   <h1> WELCOME TO THE GAME </h1 >
   </div>
-  
   <div class="user">
   Users Connected 
   </div>
+  
+  <div class="login">
+   <input class="input1" ref={email}  type= "text"/>
+   
+   <div class="list"> {user.map((item)=> { return <div>{item}</div>;})} </div>
+   <button onClick={()=>{showboard ();}}> Log in</button> 
+   </div>
+  
+  
+  
+  {isShown ?(
+ <div>
   <div class="tchat_box">
   Chat Box!
   </div>
-  
-   <div class="login">
-   <input class="input1" ref={email}  type= "text"/>
-   <button onClick={()=>{login();}}> Log in</button> 
-   <div class="list"> {user.map((item)=> { return <div>{item}</div>;})} </div>
-   </div>
    
    <div class="tchat">
    
    <textarea ref={tchat} placeholder="Type message.." name="msg" required></textarea>
    <button onClick={()=>{tchatf();}}> Post</button> 
-   {tchat2.map((item)=> { return <div>{item}</div>;})}
+   {tchat2.map((item)=> { return <li> {dict[socket.id]} : {item} </li>;})}
    </div>
    
   <div class="reset">
    <button onClick={()=>{restart();}}> Restart</button> 
    </div>
-   
-     
-     
-         
-   
-   
+   <div>{win} </div>
    <div class="board">
-        
     {board.map((item,index) => <Board name={() => onclick(index)} value={item} />)}
     </div>
+    </div>
+     
+   ) : null}
   
    </div> 
-     
+   
    
   );
 }
 
 export default App;
-
