@@ -81,12 +81,6 @@ function App() {
   }, []);
 
 
-
-
-
-function onclick(index){
- 
- 
  function winner(board) {
   const lines = [
     [0, 1, 2],
@@ -101,11 +95,17 @@ function onclick(index){
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-      return (board[a]);
+      return (<div> GAME OVER {board[a]} WON THE GAME</div>);
     }
   }
   return null;
 }
+
+
+
+function onclick(index){
+ 
+ 
        //users can still play if there is no winner
       if( winner(board) == null ){
        const x=socket.id;
@@ -147,35 +147,24 @@ function onclick(index){
 
        
       }
-      console.log(turn);
+     
       
       }
 
   //reset the board
   function restart(){
-   if( socket.id == myArray[0][0]  ){
+   
    board.fill(null);
-   }
-   if( socket.id == myArray[0][1]  ){
-   board.fill(null);
-   }
+  
   
   socket.emit('newboard', { board: board });
    
   }
   //to log in users
-  function login ()
-  {
-   
-    //const newdict={...dict};
-    //newdict[socket.id]=email2;
-   // updatedict(newdict);
-   
-    //socket.emit('dict', { dict:newdict});
-    
-     }
   
-   
+  
+  
+  //update tchat list
   function tchatf ()
   {
    const tchat1 = tchat.current.value;
@@ -229,7 +218,8 @@ function onclick(index){
   <div class="tchat_box">
   Chat Box!
   </div>
-   
+  <div class ="win">
+    {winner(board)}</div>
    <div class="tchat">
    
    <textarea ref={tchat} placeholder="Type message.." name="msg" required></textarea>

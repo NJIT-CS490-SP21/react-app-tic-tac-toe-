@@ -76,6 +76,14 @@
      
     
 }
+
+.win{
+    position: fixed;
+     top: 90%;
+     left: 30%;
+     
+    text-shadow: 2px 2px 5px red;
+}
 .title{
     text-shadow: 2px 2px 5px red;
     position: fixed;
