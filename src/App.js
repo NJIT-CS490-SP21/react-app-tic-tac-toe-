@@ -17,8 +17,9 @@ function App() {
   const email=useRef(null);
   const tchat=useRef(null);
   const [turn, updateturn] = useState([]);
-  const [dict, updatedict] = useState({});
-  const win='';
+  //const [dict, updatedict] = useState({});
+  const [couser, updatecouser] = useState([]);
+  
   
  
   
@@ -44,6 +45,9 @@ function App() {
       const newlog=[...data.user];
  
       updateuser(newlog);
+      const newcouser=[...data.id];
+ 
+      updatecouser(newcouser);
        
     }); 
     
@@ -70,9 +74,9 @@ function App() {
       
     });
     
-    socket.on('newdict', (data) => {
-    const newdict={...data.dict};
-    updatedict(newdict);    });
+    //socket.on('newdict', (data) => {
+    //const newdict={...data.dict};
+    //updatedict(newdict);    });
     
   }, []);
 
@@ -108,7 +112,7 @@ function onclick(index){
        //adding first connected user to list and assiging 'X"
        if (myArray.length>0)
        {
-      if (x==myArray[0][0]['cid']&& turn[0]!=x)
+      if (x==myArray[0][0]['cid']&&turn[0]!=x)
      {  
      
       const newboard=[...board];
@@ -118,7 +122,10 @@ function onclick(index){
       setBoard(newboard);
       socket.emit('board', { index: index });
       socket.emit('newboard', { board: newboard });
-      
+     const newturn=[...turn];
+    newturn[0]=x;
+    updateturn(newturn);
+    socket.emit('turn', { turn: newturn });
       
      }
       //adding 2nd connected user to list and assiging 'O'
@@ -132,14 +139,15 @@ function onclick(index){
       setBoard(new_board);
       socket.emit('board', { index: index });
       socket.emit('newboard', { board: new_board });}
-     
-}
-const newturn=[...turn];
+     const newturn=[...turn];
   newturn[0]=x;
   updateturn(newturn);
    socket.emit('turn', { turn: newturn });
+}
+
        
       }
+      console.log(turn);
       
       }
 
@@ -158,21 +166,15 @@ const newturn=[...turn];
   //to log in users
   function login ()
   {
-   const email2 = email.current.value;
-   const newuser=[...user];
-     
-      newuser.push(email2);
-      updateuser(newuser);
-      
-    socket.emit('login', { user:newuser });
-    const newdict={...dict};
-    newdict[socket.id]=email2;
-    updatedict(newdict);
-    console.log(newdict);
-    socket.emit('dict', { dict:newdict});
+   
+    //const newdict={...dict};
+    //newdict[socket.id]=email2;
+   // updatedict(newdict);
+   
+    //socket.emit('dict', { dict:newdict});
     
      }
-   win=login();
+  
    
   function tchatf ()
   {
@@ -188,10 +190,20 @@ const newturn=[...turn];
      
      
    function showboard(){
-    login();
+    const email2 = email.current.value;
+   const newuser=[...user];
+     
+      newuser.push(email2);
+      updateuser(newuser);
+      
+    socket.emit('login', { user:newuser,id:socket.id });
+    //users need to enter username to see board
+    if (couser.includes(socket.id) ) {return false;}
+    else if (email2.length>0)
+    { 
     setshown((prevShown)=>{
      return !prevShown;
-    });
+    });}
    }
     
 
@@ -212,7 +224,6 @@ const newturn=[...turn];
    </div>
   
   
-  
   {isShown ?(
  <div>
   <div class="tchat_box">
@@ -223,13 +234,13 @@ const newturn=[...turn];
    
    <textarea ref={tchat} placeholder="Type message.." name="msg" required></textarea>
    <button onClick={()=>{tchatf();}}> Post</button> 
-   {tchat2.map((item)=> { return <li> {dict[socket.id]} : {item} </li>;})}
+   {tchat2.map((item)=> { return <li>  {item} </li>;})}
    </div>
    
   <div class="reset">
    <button onClick={()=>{restart();}}> Restart</button> 
    </div>
-   <div>{win} </div>
+   
    <div class="board">
     {board.map((item,index) => <Board name={() => onclick(index)} value={item} />)}
     </div>
