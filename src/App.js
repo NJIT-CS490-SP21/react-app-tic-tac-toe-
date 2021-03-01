@@ -1,13 +1,15 @@
-import logo from './logo.svg';
+
 import './App.css';
 import './Board1.css';
 import {Board} from './Board.js';
+import {User} from './User.js';
+import {Tchat} from './Tchat.js';
 import { useState, useRef, useEffect } from 'react';
 import io from 'socket.io-client';
 const socket = io(); // Connects to socket connection
 
 
-function App() {
+  function App() {
   
   const [board, setBoard] = useState(Array(9).fill(null));
   const [myArray, updateMyArray] = useState([]);
@@ -17,9 +19,7 @@ function App() {
   const email=useRef(null);
   const tchat=useRef(null);
   const [turn, updateturn] = useState([]);
-  //const [dict, updatedict] = useState({});
-  const [couser, updatecouser] = useState([]);
-  
+ 
   
  
   
@@ -30,7 +30,13 @@ function App() {
      
       const newboard=[...data.board];
  
-      setBoard(newboard);
+      setBoard(newboard);}); 
+      socket.on('newlogin2', (data) => {
+     
+      const newarr=[...data.array];
+ 
+      updateMyArray(newarr);
+      
        
     }); 
      socket.on('newmessage', (data) => {
@@ -40,16 +46,18 @@ function App() {
       updatetchat(newtchat);
        
     }); 
-    socket.on('newlogin', (data) => {
-     
-      const newlog=[...data.user];
- 
+    
+    
+    
+    socket.on('newuser', (data) => {
+    
+     const newlog=[...data.user];
+      
       updateuser(newlog);
-      const newcouser=[...data.id];
- 
-      updatecouser(newcouser);
-       
+     
+      
     }); 
+    
     
     socket.on('newturn', (data) => {
      
@@ -60,27 +68,10 @@ function App() {
     }); 
     
     
-    socket.on('connect', () => {
-     const cid=socket.id;
-     socket.emit('clientid', { cid: cid });
-
-      
-    });
-    socket.on('user', (data) => {
-     const array=[...myArray];
-     
-      array.push(data);
-      updateMyArray(array);
-      
-    });
-    
-    //socket.on('newdict', (data) => {
-    //const newdict={...data.dict};
-    //updatedict(newdict);    });
-    
   }, []);
 
 
+ //calculate winner
  function winner(board) {
   const lines = [
     [0, 1, 2],
@@ -105,14 +96,14 @@ function App() {
 
 function onclick(index){
  
- 
-       //users can still play if there is no winner
+        
+       //game stop if winner is found
       if( winner(board) == null ){
        const x=socket.id;
        //adding first connected user to list and assiging 'X"
        if (myArray.length>0)
        {
-      if (x==myArray[0][0]['cid']&&turn[0]!=x)
+      if (x==myArray[0]&&turn[0]!=x)
      {  
      
       const newboard=[...board];
@@ -122,14 +113,14 @@ function onclick(index){
       setBoard(newboard);
       socket.emit('board', { index: index });
       socket.emit('newboard', { board: newboard });
-     const newturn=[...turn];
-    newturn[0]=x;
-    updateturn(newturn);
-    socket.emit('turn', { turn: newturn });
+      const newturn=[...turn];
+     newturn[0]=x;
+     updateturn(newturn);
+     socket.emit('turn', { turn: newturn });
       
      }
       //adding 2nd connected user to list and assiging 'O'
-      else if (x==myArray[0][1]['cid']&& turn[0]!=x)
+      else if (x==myArray[1]&& turn[0]!=x)
      { 
         
       const new_board=[...board];
@@ -151,16 +142,18 @@ function onclick(index){
       
       }
 
-  //reset the board
+  //Only Plyers can reset the board
   function restart(){
-   
+   if( myArray.includes(socket.id))
+   {
    board.fill(null);
   
   
   socket.emit('newboard', { board: board });
+  
    
-  }
-  //to log in users
+  }}
+  
   
   
   
@@ -180,14 +173,28 @@ function onclick(index){
      
    function showboard(){
     const email2 = email.current.value;
-   const newuser=[...user];
      
+    
+   const newuser=[...user];
+   //user cannot take username already taken
+      if (newuser.includes(email2))
+      {  return;
+       }
+      else{
       newuser.push(email2);
       updateuser(newuser);
       
-    socket.emit('login', { user:newuser,id:socket.id });
+    socket.emit('newlogin', { user:newuser });
+      }
+      const newlog=[...myArray];
+      if (myArray.length<2){
+       newlog.push(socket.id);
+      updateMyArray(newlog);
+     }
+     socket.emit('login2', { array: newlog });
+    
     //users need to enter username to see board
-    if (couser.includes(socket.id) ) {return false;}
+    if (user.includes(email2) ) {return false;}
     else if (email2.length>0)
     { 
     setshown((prevShown)=>{
@@ -208,10 +215,11 @@ function onclick(index){
   <div class="login">
    <input class="input1" ref={email}  type= "text"/>
    
-   <div class="list"> {user.map((item)=> { return <div>{item}</div>;})} </div>
    <button onClick={()=>{showboard ();}}> Log in</button> 
    </div>
-  
+   <div class="list">
+   {user.map((item) => <User  value={item} />)}
+  </div>
   
   {isShown ?(
  <div>
@@ -224,7 +232,8 @@ function onclick(index){
    
    <textarea ref={tchat} placeholder="Type message.." name="msg" required></textarea>
    <button onClick={()=>{tchatf();}}> Post</button> 
-   {tchat2.map((item)=> { return <li>  {item} </li>;})}
+   {tchat2.map((item)=> <Tchat value= {item} />)}
+  
    </div>
    
   <div class="reset">

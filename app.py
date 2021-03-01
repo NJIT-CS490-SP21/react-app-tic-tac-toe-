@@ -13,16 +13,17 @@ socketio = SocketIO(
     json=json,
     manage_session=False
 )
-lst=[]
+
 @app.route('/', defaults={"filename": "index.html"})
 @app.route('/<path:filename>')
+
 def index(filename):
     return send_from_directory('./build', filename)
 
 # When a client connects from this Socket connection, this function is run
 @socketio.on('connect')
 def on_connect():
-    
+    print('user connected')
     socketio.emit('connect',  broadcast=True, include_self=False)
 # When a client disconnects from this Socket connection, this function is run
 @socketio.on('disconnect')
@@ -44,7 +45,7 @@ def foo(data): # data is whatever arg you pass in your emit call on client
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 @socketio.on('login')
 def foo1(data): # data is whatever arg you pass in your emit call on client
-    
+    print(data)
     socketio.emit('newlogin',  data, broadcast=True, include_self=False)
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 @socketio.on('message')
@@ -59,11 +60,15 @@ def foo3(data): # data is whatever arg you pass in your emit call on client
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 
 
-@socketio.on('clientid')
-def goo(data):
-    if len(lst)<2 and data not in lst:
-        lst.append(data)
-    socketio.emit('user',lst, broadcast=True, include_self=False)
+@socketio.on('newlogin')
+def foo11(data):
+    socketio.emit('newuser',data, broadcast=True, include_self=False)
+@socketio.on('login2')
+def foo01(data):
+    print(data)
+    socketio.emit('newlogin2',data, broadcast=True, include_self=False)
+    
+    
 socketio.run(
     app,
     host=os.getenv('IP', '0.0.0.0'),
