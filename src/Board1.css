@@ -1,0 +1,108 @@
+.board {
+	width: 300px; /* Total horizontal dimensions */
+	height: 300px; /* Total vertical dimensions */
+	display: grid; /* Enables CSS Grid */ 
+	grid-template-columns: repeat(3, 1fr); /* Total horizontal space broken into 3 columns */
+  grid-template-rows: repeat(3, 1fr); /* Total vertical space broken into 3 rows */
+  
+  grid-gap: 10px;
+  position: fixed; /* or absolute */
+  top: 30%;
+  left: 30%;
+ 
+  
+   
+}
+
+.box {
+  border: 1px solid black; /* Shows the lines in the CSS grid */
+  background-color: lightblue;
+  text-align: center;
+
+  font-size:40px ;
+  font-weight:bold;
+  
+}
+.login{
+    position: fixed;
+     top: 20%;
+    left: 35%;
+    
+}
+.tchat_box{
+    
+ position: fixed; /* or absolute */
+  top: 15%;
+  left: 75%;
+  text-decoration: underline overline;
+  text-shadow: 2px 2px 5px red;
+}
+.tchat{
+    position: fixed; /* or absolute */
+  top: 20%;
+  left: 65%;
+   width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+ border: 1px solid #000;
+  background: #f1f1f1;
+  resize: none;
+  min-height: 500px;
+   
+    
+    
+}
+.user{
+    position: fixed; /* or absolute */
+  top: 15%;
+  left: 2%;
+  text-decoration: underline overline;
+  text-shadow: 2px 2px 5px red;
+  
+}
+.list{
+    position: fixed;
+   top: 20%;
+  left: 2%;
+  
+    
+}    
+    
+
+.reset{
+    position: fixed;
+     top: 80%;
+     left: 40%;
+     
+    
+}
+
+.win{
+    position: fixed;
+     top: 90%;
+     left: 30%;
+     
+    text-shadow: 2px 2px 5px red;
+}
+.title{
+    text-shadow: 2px 2px 5px red;
+    position: fixed;
+     top: 5%;
+    left: 31%;
+    text-decoration: underline overline;
+    
+}
+button{
+   
+  cursor: pointer;
+  border-radius: 50%;
+}
+textarea{
+   padding: 25px 42px; 
+}
+.input1{
+   padding: 8px 15px; 
+}
+.main{
+    background-color: grey;
+}
