@@ -2,138 +2,16 @@
 import './App.css';
 import './Board1.css';
 import {Board} from './Board.js';
-<<<<<<< HEAD
-=======
 import {User} from './User.js';
 import {Tchat} from './Tchat.js';
->>>>>>> milestone_1
 import { useState, useRef, useEffect } from 'react';
 import io from 'socket.io-client';
+import 'emoji-mart/css/emoji-mart.css';
+import { Picker } from 'emoji-mart';
+
 const socket = io(); // Connects to socket connection
 
-<<<<<<< HEAD
 
-function App() {
-  
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [myArray, updateMyArray] = useState([]);
-  const [user, updateuser] = useState([]);
-  const [isShown, setshown] = useState(true);
-  const [tchat2, updatetchat] = useState([]);
-  const email=useRef(null);
-   const tchat=useRef(null);
- 
-  
- 
-  
-  
-  useEffect(() => {
-     socket.on('newboard', (data) => {
-     
-      const newboard=[...data.board];
- 
-      setBoard(newboard);
-       
-    }); 
-    socket.on('connect', () => {
-     const cid=socket.id;
-     socket.emit('clientid', { cid: cid });
-
-      
-    });
-    socket.on('user', (data) => {
-     const array=[...myArray];
-     
-      array.push(data);
-      updateMyArray(array);
-      
-    });
-    
-  }, []);
-
-//console.log(myArray);
-function onclick(index){
-       
-       const x=socket.id;
-       //console.log(x);
-      if (x==myArray[0][1]['cid'])
-     { 
-      const newboard=[...board];
-      
-       newboard[index]= "0" ;
-     
-      setBoard(newboard);
-      socket.emit('board', { index: index });
-      socket.emit('newboard', { board: newboard });}
-      
-      else if (x==myArray[0][0]['cid'])
-     { 
-       
-      const new_board=[...board];
-     
-       new_board[index]= "X" ;
-     
-      setBoard(new_board);
-      socket.emit('board', { index: index });
-      socket.emit('newboard', { board: new_board });}
-      
-}
-
-  
-  function login ()
-  {
-   const email2 = email.current.value;
-   const newuser=[...user];
-     
-      newuser.push(email2);
-      updateuser(newuser);
-     }
-   
-   
-  function tchatf ()
-  {
-   const tchat1 = tchat.current.value;
-   const newtchat=[...tchat2];
-     
-      newtchat.push(tchat1);
-      updatetchat(newtchat);
-     }
-   function showboard(){
-    //login();
-    setshown((prevShown)=>{
-     return !prevShown;
-    });
-   }
-    
-
-  return (
-  <div>
-  <h> WELCOME TO THE GAME </h>
-  <div class="title">
-  <div> Users Connected </div>
-  </div>
-   <div class="login">
-   
-   <input ref={email}  type= "text"/>
-         
-   <button onClick={()=>{login();}}> Log in</button> 
-   <div class="user"> {user.map((item)=> { return <div>{item}</div>;})} </div>
-   </div>
-   <div class="tchat">
-   
-   <input ref={tchat}  type= "text"/>
-         
-   <button onClick={()=>{tchatf();}}> Post</button> 
-  <div> {tchat2.map((item)=> { return <div>{item}</div>;})} </div>
-   </div>
-   
-   <div class="board">
-        
-    {board.map((item,index) => <Board name={() => onclick(index)} value={item} />)}
-  
-    </div>
-   </div>
-=======
 
   function App() {
   
@@ -141,17 +19,44 @@ function onclick(index){
   const [myArray, updateMyArray] = useState([]);
   const [user, updateuser] = useState([]);
   const [isShown, setshown] = useState(false);
+  const [isShow, setshow] = useState(false);
   const [tchat2, updatetchat] = useState([]);
   const email=useRef(null);
   const tchat=useRef(null);
   const [turn, updateturn] = useState([]);
+  const [dic, updatedic]=useState({});
+  //const [username,updateusername] = useState([]);
+  const [rank,updaterank] = useState([]);
+ // const [score, updatescore]=useState({});
  
-  
+ 
  
   
  
   
   useEffect(() => {
+   
+     socket.on('newrank', (data) => {
+     
+      
+      const newrank=[...rank];
+      for (const x in data)
+      {newrank.push(data[x]);}
+      //newrank=newrank[0];
+      updaterank(newrank);
+      
+      
+      
+      //const newusername=[...username];
+      //for (const y in data['username']){
+      //newusername.push(data['username'][y]);}
+     
+      //updateusername(newusername);
+      //console.log(newusername);
+      //console.log(newrank);
+       
+    }); 
+    
      socket.on('newboard', (data) => {
      
       const newboard=[...data.board];
@@ -163,6 +68,15 @@ function onclick(index){
  
       updateMyArray(newarr);
       
+       
+    }); 
+    
+    socket.on('dicrecieved', (data) => {
+     
+      const newdic2={...data.dic};
+ 
+      updatedic(newdic2);
+      //console.log(newdic2);
        
     }); 
      socket.on('newmessage', (data) => {
@@ -192,13 +106,23 @@ function onclick(index){
       updateturn(newturn);
        
     }); 
+   
     
     
   }, []);
+function addEmoji(emoji) {
+      const { newMessage } = this.state;
+      const text = `${newMessage}${emoji.native}`;
 
+      this.setState({
+        newMessage: text,
+        showEmojiPicker: false,
+      });
+    }
 
  //calculate winner
  function winner(board) {
+  const lst=['X','O'];
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -212,17 +136,29 @@ function onclick(index){
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-      return (<div> GAME OVER {board[a]} WON THE GAME</div>);
+      const win=dic[board[a]];
+      const index = lst.indexOf(board[a]);
+      lst.splice(index,1);
+      const looser=dic[lst[0]];
+      
+      socket.emit('winner', { winner: win,looser:looser });
+      return (<div><div> GAME OVER { win } WON THE GAME  </div>
+      <div> CLICK ON RESTART TO PLAY AGAIN</div></div>);
+      
+    }
+    if (!board.includes(null))
+    {
+     return (<div><div> GAME OVER IT'S A TIE GAME </div>
+     <div> CLICK ON RESTART TO PLAY AGAIN</div></div>);
     }
   }
   return null;
 }
 
 
-
 function onclick(index){
  
-        
+       
        //game stop if winner is found
       if( winner(board) == null ){
        const x=socket.id;
@@ -234,7 +170,7 @@ function onclick(index){
      
       const newboard=[...board];
       
-       newboard[index]= "x" ;
+       newboard[index]= "X" ;
      
       setBoard(newboard);
       socket.emit('board', { index: index });
@@ -268,12 +204,12 @@ function onclick(index){
       
       }
 
-  //Only Plyers can reset the board
+  //Only Palyers can reset the board
   function restart(){
    if( myArray.includes(socket.id))
    {
    board.fill(null);
-  
+   onclick(0);
   
   socket.emit('newboard', { board: board });
   
@@ -281,25 +217,23 @@ function onclick(index){
   }}
   
   
-  
-  
   //update tchat list
   function tchatf ()
   {
    const tchat1 = tchat.current.value;
+   
    const newtchat=[...tchat2];
      
       newtchat.push(tchat1);
       updatetchat(newtchat);
     socket.emit('message', { message:newtchat });
+    return(<div> {dic[socket.id]} </div>);
      }
      
-     
-     
-     
    function showboard(){
+    
+    
     const email2 = email.current.value;
-     
     
    const newuser=[...user];
    //user cannot take username already taken
@@ -309,8 +243,8 @@ function onclick(index){
       else{
       newuser.push(email2);
       updateuser(newuser);
+       socket.emit('newlogin', { user:newuser });
       
-    socket.emit('newlogin', { user:newuser });
       }
       const newlog=[...myArray];
       if (myArray.length<2){
@@ -318,57 +252,93 @@ function onclick(index){
       updateMyArray(newlog);
      }
      socket.emit('login2', { array: newlog });
+      
+      const newdic={...dic};
+      if (socket.id==newlog[0])
+      {
+      newdic['X']=email2;}
+      else if (socket.id==newlog[1])
+      {
+      newdic['O']=email2;}
+      updatedic(newdic);
+      socket.emit('newdic', { dic:newdic });
     
-    //users need to enter username to see board
-    if (user.includes(email2) ) {return false;}
-    else if (email2.length>0)
+    if (email2.length>0)
     { 
     setshown((prevShown)=>{
      return !prevShown;
     });}
    }
+   
+   function showrank(){
+   socket.emit('rank', { });
+    setshow((prevShow)=>{
+     return !prevShow;
+    });
+   }
     
-
+// <Picker onSelect={addEmoji} /> 
   return (
   <div>
-  <div class="title" >
+  <div className="title" >
   <h1> WELCOME TO THE GAME </h1 >
   </div>
-  <div class="user">
+  <div className="user">
   Users Connected 
   </div>
   
-  <div class="login">
-   <input class="input1" ref={email}  type= "text"/>
+  <div className="login">
+   <input className="input1" ref={email}  type= "text"/>
    
    <button onClick={()=>{showboard ();}}> Log in</button> 
    </div>
-   <div class="list">
+   <div className="list">
    {user.map((item) => <User  value={item} />)}
   </div>
   
   {isShown ?(
  <div>
-  <div class="tchat_box">
+  <div className="tchat_box">
   Chat Box!
   </div>
-  <div class ="win">
+  <div className ="win">
     {winner(board)}</div>
-   <div class="tchat">
-   
-   <textarea ref={tchat} placeholder="Type message.." name="msg" required></textarea>
-   <button onClick={()=>{tchatf();}}> Post</button> 
-   {tchat2.map((item)=> <Tchat value= {item} />)}
+   <div className="tchat">
+  
+   <textarea ref={tchat} placeholder="Type message.."></textarea>
+   <button onClick={()=>{tchatf()}}> Post</button> 
+   {tchat2.map((item)=> <Tchat value= {item}  />)}
   
    </div>
    
-  <div class="reset">
+  <div className="reset">
    <button onClick={()=>{restart();}}> Restart</button> 
    </div>
    
-   <div class="board">
+   <div className="board">
     {board.map((item,index) => <Board name={() => onclick(index)} value={item} />)}
+    
     </div>
+    <div className="rank">
+    <button onClick={()=>{showrank();}}> Show rank</button> 
+    </div>
+    {isShow ?(
+    <table className="center">
+    
+    <thead>
+        <tr>
+            <th colSpan="2">Leader Board</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+        {rank.map((user) => (<tr>{user} </tr> ))}
+        </tr>
+    </tbody>
+</table>
+ 
+ ) : null}
+   
     </div>
      
    ) : null}
@@ -376,9 +346,7 @@ function onclick(index){
    </div> 
    
    
->>>>>>> milestone_1
   );
 }
 
 export default App;
-

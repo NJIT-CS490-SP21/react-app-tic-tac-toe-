@@ -8,7 +8,7 @@
   grid-gap: 10px;
   position: fixed; /* or absolute */
   top: 30%;
-  left: 30%;
+  left: 35%;
  
   
    
@@ -32,22 +32,22 @@
 .tchat_box{
     
  position: fixed; /* or absolute */
-  top: 15%;
+  top: 60%;
   left: 75%;
   text-decoration: underline overline;
   text-shadow: 2px 2px 5px red;
 }
 .tchat{
     position: fixed; /* or absolute */
-  top: 20%;
+  top: 65%;
   left: 65%;
-   width: 100%;
+   width: 50%;
   padding: 15px;
   margin: 5px 0 22px 0;
  border: 1px solid #000;
   background: #f1f1f1;
   resize: none;
-  min-height: 500px;
+  min-height: 200px;
    
     
     
@@ -55,7 +55,7 @@
 .user{
     position: fixed; /* or absolute */
   top: 15%;
-  left: 2%;
+  left: 73%;
   text-decoration: underline overline;
   text-shadow: 2px 2px 5px red;
   
@@ -63,7 +63,7 @@
 .list{
     position: fixed;
    top: 20%;
-  left: 2%;
+  left: 73%;
   
     
 }    
@@ -72,7 +72,7 @@
 .reset{
     position: fixed;
      top: 80%;
-     left: 40%;
+     left: 45%;
      
     
 }
@@ -80,7 +80,7 @@
 .win{
     position: fixed;
      top: 90%;
-     left: 30%;
+     left: 35%;
      
     text-shadow: 2px 2px 5px red;
 }
@@ -103,6 +103,30 @@ textarea{
 .input1{
    padding: 8px 15px; 
 }
-.main{
-    background-color: grey;
+table,
+td {
+    border: 1px solid #333;
+}
+
+thead,
+tfoot {
+    background-color: #333;
+    color: #fff;
+}
+
+
+.center{
+    position: fixed;
+     top: 10%;
+     left: 5%;
+     width: 15%;
+     
+    text-shadow: 2px 2px 5px red;
+}
+.rank{
+    position: fixed;
+     top: 5%;
+     left: 10%;
+     
+    
 }
