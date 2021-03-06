@@ -4,8 +4,8 @@ import './Board1.css';
 import {Board} from './Board.js';
 import {User} from './User.js';
 import {Rank} from './Rank.js';
-import { Button } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+//import { Button } from 'react-bootstrap';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 import {Tchat} from './Tchat.js';
 import { useState, useRef, useEffect } from 'react';
 import io from 'socket.io-client';
@@ -336,7 +336,7 @@ function onclick(index){
    <div className="tchat">
   
    <textarea ref={tchat} placeholder="Type message.."></textarea>
-   <Button onClick={()=>{tchatf()}}> Post</Button> 
+   <button onClick={()=>{tchatf()}}> Post</button> 
    {tchat2.map((item)=> <Tchat value= {item}  />)}
   
    </div>

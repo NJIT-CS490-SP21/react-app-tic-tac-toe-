@@ -101,11 +101,11 @@ textarea{
    padding: 25px 42px; 
 }
 .input1{
-   padding: 8px 15px; 
+   padding: 5px 15px; 
 }
 table,
 td {
-    border: 1px solid #333;
+    border: 2px solid #333;
 }
 
 thead,
@@ -127,15 +127,16 @@ p{
 }
 .rank{
     position: fixed;
-     top: 10%;
+     top: 7%;
      left: 15%;
      
     
 }
 .search{
     position: fixed;
-     top: 15%;
-     left: 10%;
+     top: 13%;
+     left: 7%;
+      padding: 5px 15px; 
      
     
 }
