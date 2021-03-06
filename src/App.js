@@ -7,8 +7,8 @@ import {Rank} from './Rank.js';
 import {Tchat} from './Tchat.js';
 import { useState, useRef, useEffect } from 'react';
 import io from 'socket.io-client';
-import 'emoji-mart/css/emoji-mart.css';
-import { Picker } from 'emoji-mart';
+//import 'emoji-mart/css/emoji-mart.css';
+//import { Picker } from 'emoji-mart';
 
 const socket = io(); // Connects to socket connection
 
