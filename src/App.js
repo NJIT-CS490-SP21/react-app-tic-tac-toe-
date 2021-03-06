@@ -12,8 +12,6 @@ import io from 'socket.io-client';
 
 const socket = io(); // Connects to socket connection
 
-
-
   function App() {
   
   const [board, setBoard] = useState(Array(9).fill(null));
@@ -34,11 +32,10 @@ const socket = io(); // Connects to socket connection
    
      socket.on('newrank', (data) => {
      
-      
+     
       const newrank=[...rank];
       for (const x in data)
       {newrank.push(data[x]);}
-      //newrank=newrank[0];
       updaterank(newrank);
        
     }); 
@@ -223,7 +220,7 @@ function onclick(index){
      
    function showboard(){
     
-    socket.emit('rank', { });
+    
     const email2 = email.current.value;
     
    const newuser=[...user];
@@ -252,17 +249,22 @@ function onclick(index){
       {
       newdic['O']=email2;}
       updatedic(newdic);
+     
       socket.emit('newdic', { dic:newdic });
+      
     
     if (email2.length>0)
     { 
     setshown((prevShown)=>{
      return !prevShown;
-    });}
+    });
+     
+    }
    }
    
    function showrank(){
-   
+     socket.emit('rank', { });
+    
     setshow((prevShow)=>{
      return !prevShow;
     });

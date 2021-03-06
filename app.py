@@ -74,17 +74,19 @@ def foo2(data): # data is whatever arg you pass in your emit call on client
 @socketio.on('newdic')
 def foo5(data): # data is whatever arg you pass in your emit call on client
     socketio.emit('dicrecieved',  data, broadcast=True, include_self=False)
-    print(data)
+    
     if len(data['dic'])>1:
         x=date.today()
+        
+        new_user2 = models.Person(username=data['dic']['O'], score=100, date=x)
+        db.session.add(new_user2)
+        db.session.commit()
        
         new_user = models.Person(username=data['dic']['X'], score=100, date=x)
-        new_user2 = models.Person(username=data['dic']['O'], score=100, date=x)
-        
         db.session.add(new_user)
-        db.session.add(new_user2)
-       
         db.session.commit()
+        
+   
         
     
 # Note that we don't call app.run anymore. We call socketio.run with app arg
@@ -110,25 +112,25 @@ def foo12(data):
    
   
     winner = models.Person.query.filter_by(username=data['winner']).first()
-    winner.score = winner.score+1
-    db.session.merge(winner)
-    db.session.commit()
-    
+    if winner.score<100:
+        winner.score = winner.score+1
+        db.session.merge(winner)
+        db.session.commit()
     looser = models.Person.query.filter_by(username=data['looser']).first()
-    looser.score = looser.score-1
-    db.session.merge(looser)
-    db.session.commit()
+    if looser.score>0:
+        looser.score = looser.score-1
+        db.session.merge(looser)
+        db.session.commit()
 @socketio.on('rank')
 def foo13(data):
-    
+   
     all_people = models.Person.query.order_by(desc('score')).all()
     users = []
     
     for person in all_people:
         #users.append(person.username+' '+ str(person.score) +' '+ str(person.date))
         users.append(person.username + '   '+str(person.score))
-        
-        
+      
     socketio.emit('newrank',users, broadcast=True, include_self=False)   
     
 if __name__ == "__main__":
