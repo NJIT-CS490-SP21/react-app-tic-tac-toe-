@@ -3,7 +3,9 @@
         {
         
         return(
-      <tr>
-
-          <th>{props.value}</th>
-          </tr>);}
+      
+          <tr>
+          <td>{props.value}</td> 
+          <td>{props.data}</td> 
+          </tr>
+          );}

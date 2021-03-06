@@ -62,10 +62,10 @@ def foo(data): # data is whatever arg you pass in your emit call on client
     
     socketio.emit('newboard',  data, broadcast=True, include_self=False)
 # Note that we don't call app.run anymore. We call socketio.run with app arg
-@socketio.on('login')
-def foo1(data): # data is whatever arg you pass in your emit call on client
-   
-    socketio.emit('newlogin',  data, broadcast=True, include_self=False)
+#@socketio.on('login')
+#def foo1(data): # data is whatever arg you pass in your emit call on client
+    #print(data)
+   # socketio.emit('newlogin',  data, broadcast=True, include_self=False)
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 @socketio.on('message')
 def foo2(data): # data is whatever arg you pass in your emit call on client
@@ -75,16 +75,27 @@ def foo2(data): # data is whatever arg you pass in your emit call on client
 def foo5(data): # data is whatever arg you pass in your emit call on client
     socketio.emit('dicrecieved',  data, broadcast=True, include_self=False)
     
+    
+    all_people = models.Person.query.order_by(desc('score')).all()
+    users = []
+    
+    for person in all_people:
+        users.append(person.username)
+   
+    
     if len(data['dic'])>1:
         x=date.today()
-        
         new_user2 = models.Person(username=data['dic']['O'], score=100, date=x)
-        db.session.add(new_user2)
-        db.session.commit()
+        
        
+        if data['dic']['O'] not in users:
+            db.session.add(new_user2)
+            db.session.commit()
+        
         new_user = models.Person(username=data['dic']['X'], score=100, date=x)
-        db.session.add(new_user)
-        db.session.commit()
+        if data['dic']['X'] not in users:
+            db.session.add(new_user)
+            db.session.commit()
         
    
         
@@ -99,11 +110,11 @@ def foo3(data): # data is whatever arg you pass in your emit call on client
 
 @socketio.on('newlogin')
 def foo11(data):
-   
+    
     socketio.emit('newuser',data, broadcast=True, include_self=False)
 @socketio.on('login2')
 def foo01(data):
-    #print(data)
+   
     socketio.emit('newlogin2',data, broadcast=True, include_self=False)
     
 
@@ -112,26 +123,28 @@ def foo12(data):
    
   
     winner = models.Person.query.filter_by(username=data['winner']).first()
-    if winner.score<100:
-        winner.score = winner.score+1
-        db.session.merge(winner)
-        db.session.commit()
+   
+    winner.score = winner.score+1
+    db.session.merge(winner)
+    db.session.commit()
     looser = models.Person.query.filter_by(username=data['looser']).first()
-    if looser.score>0:
-        looser.score = looser.score-1
-        db.session.merge(looser)
-        db.session.commit()
+   
+    looser.score = looser.score-1
+    db.session.merge(looser)
+    db.session.commit()
 @socketio.on('rank')
 def foo13(data):
    
     all_people = models.Person.query.order_by(desc('score')).all()
     users = []
+    score=[]
     
     for person in all_people:
         #users.append(person.username+' '+ str(person.score) +' '+ str(person.date))
-        users.append(person.username + '   '+str(person.score))
+        users.append(person.username)
+        score.append(person.score)
       
-    socketio.emit('newrank',users, broadcast=True, include_self=False)   
+    socketio.emit('newrank',[users,score], broadcast=True, include_self=False)   
     
 if __name__ == "__main__":
     #db.create_all()

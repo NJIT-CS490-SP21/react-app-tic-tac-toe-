@@ -4,6 +4,8 @@ import './Board1.css';
 import {Board} from './Board.js';
 import {User} from './User.js';
 import {Rank} from './Rank.js';
+import { Button } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {Tchat} from './Tchat.js';
 import { useState, useRef, useEffect } from 'react';
 import io from 'socket.io-client';
@@ -22,21 +24,29 @@ const socket = io(); // Connects to socket connection
   const [tchat2, updatetchat] = useState([]);
   const email=useRef(null);
   const tchat=useRef(null);
+  const search=useRef(null);
   const [turn, updateturn] = useState([]);
   const [dic, updatedic]=useState({});
   const [rank,updaterank] = useState([]);
- // const [score, updatescore]=useState({});
+  const [score, updatescore]=useState([]);
  
 
   useEffect(() => {
    
      socket.on('newrank', (data) => {
      
+      
+    
      
       const newrank=[...rank];
-      for (const x in data)
-      {newrank.push(data[x]);}
+       const newscore=[...score];
+      for (const x in data[0])
+      {newrank.push(data[0][x]);
+       newscore.push(data[1][x]);
+      }
+      
       updaterank(newrank);
+      updatescore(newscore);
        
     }); 
     
@@ -75,9 +85,10 @@ const socket = io(); // Connects to socket connection
     socket.on('newuser', (data) => {
     
      const newlog=[...data.user];
-      
+    
       updateuser(newlog);
      
+      
       
     }); 
     
@@ -144,7 +155,7 @@ function addEmoji(emoji) {
 
 function onclick(index){
  
-       
+         console.log(user);
        //game stop if winner is found
       if( winner(board) == null ){
        const x=socket.id;
@@ -269,7 +280,26 @@ function onclick(index){
      return !prevShow;
     });
    }
-    
+   function Search()
+   { 
+    const searchs = search.current.value;
+    if (rank.includes(searchs))
+    {
+     const arr=[searchs];
+     const arrs=rank.indexOf(searchs);
+     
+     const narr=[score[arrs]];
+     
+     const newrank=[...arr];
+     const newscore=[...narr];
+     updatescore(newscore);
+     updaterank(newrank);
+     
+     }
+   
+  
+   
+   }
 // <Picker onSelect={addEmoji} /> 
   return (
   <div>
@@ -285,6 +315,9 @@ function onclick(index){
    
    <button onClick={()=>{showboard ();}}> Log in</button> 
    </div>
+   
+   
+   
    <div className="list">
    {user.map((item) => <User  value={item} />)}
   </div>
@@ -299,7 +332,7 @@ function onclick(index){
    <div className="tchat">
   
    <textarea ref={tchat} placeholder="Type message.."></textarea>
-   <button onClick={()=>{tchatf()}}> Post</button> 
+   <Button onClick={()=>{tchatf()}}> Post</Button> 
    {tchat2.map((item)=> <Tchat value= {item}  />)}
   
    </div>
@@ -316,6 +349,12 @@ function onclick(index){
     <button onClick={()=>{showrank();}}> Show rank</button> 
     </div>
     {isShow ?(
+    <div className="search">
+   <input className="input1" ref={search}  type= "text"/> <button onClick={()=>{Search();}}> Search </button> 
+   
+   
+   
+    
     <table className="center">
     
     <thead>
@@ -324,13 +363,12 @@ function onclick(index){
         </tr>
     </thead>
     <tbody>
-        
-        {rank.map((item)=> <Rank value= {item}  />)}
-        
        
+        {rank.map((item,index)=> <Rank value= {item} data={score[index]}  />)}
+      
     </tbody>
 </table>
- 
+ </div>
  ) : null}
    
     </div>
