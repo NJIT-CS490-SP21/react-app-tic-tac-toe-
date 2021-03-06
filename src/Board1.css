@@ -115,7 +115,7 @@ tfoot {
 }
 
 p{
-    color: blue; 
+    text-shadow: 2px 2px 5px red;
 }
 .center{
     position: fixed;
@@ -123,7 +123,7 @@ p{
      left: 5%;
      width: 25%;
      
-    text-shadow: 2px 2px 5px red;
+    
 }
 .rank{
     position: fixed;

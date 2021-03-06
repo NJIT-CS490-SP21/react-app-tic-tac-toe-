@@ -144,7 +144,7 @@ def foo13(data):
         users.append(person.username)
         score.append(person.score)
       
-    socketio.emit('newrank',[users,score], broadcast=True, include_self=False)   
+    socketio.emit('newrank',[users,score,data], broadcast=True, include_self=False)   
     
 if __name__ == "__main__":
     #db.create_all()

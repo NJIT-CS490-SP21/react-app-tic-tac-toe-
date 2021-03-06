@@ -34,15 +34,19 @@ const socket = io(); // Connects to socket connection
   useEffect(() => {
    
      socket.on('newrank', (data) => {
-     
-      
-    
-     
       const newrank=[...rank];
        const newscore=[...score];
       for (const x in data[0])
-      {newrank.push(data[0][x]);
+      {
+       if (data[2]['user'].includes(data[0][x]))
+       {
+       newrank.push(<p>{data[0][x]}</p> );
+       newscore.push(<p>{data[1][x]}</p>);
+       }
+       else{
+       newrank.push(data[0][x]);
        newscore.push(data[1][x]);
+       }
       }
       
       updaterank(newrank);
@@ -137,7 +141,7 @@ function addEmoji(emoji) {
       const looser=dic[lst[0]];
       
       socket.emit('winner', { winner: win,looser:looser });
-      socket.emit('rank', { });
+      socket.emit('rank', {user:user });
       
       return (<div><div> GAME OVER { win } WON THE GAME  </div>
       <div> CLICK ON RESTART TO PLAY AGAIN</div></div>);
@@ -155,7 +159,7 @@ function addEmoji(emoji) {
 
 function onclick(index){
  
-         console.log(user);
+         
        //game stop if winner is found
       if( winner(board) == null ){
        const x=socket.id;
@@ -274,7 +278,7 @@ function onclick(index){
    }
    
    function showrank(){
-     socket.emit('rank', { });
+     socket.emit('rank', {user:user});
     
     setshow((prevShow)=>{
      return !prevShow;
