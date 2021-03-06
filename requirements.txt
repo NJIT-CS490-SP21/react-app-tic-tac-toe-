@@ -1,3 +1,6 @@
 Flask
 Flask-SocketIO
 Flask-Cors
+datetime
+python-dotenv==0.15.0
+flask_sqlalchemy
