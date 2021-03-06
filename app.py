@@ -76,7 +76,7 @@ def foo5(data): # data is whatever arg you pass in your emit call on client
     socketio.emit('dicrecieved',  data, broadcast=True, include_self=False)
     if len(data['dic'])>1:
         x=date.today()
-        print(x)
+       
         new_user = models.Person(username=data['dic']['X'], score=100, date=x)
         new_user2 = models.Person(username=data['dic']['O'], score=100, date=x)
         
@@ -106,7 +106,7 @@ def foo01(data):
 
 @socketio.on('winner')
 def foo12(data):
-    print(data)
+   
   
     winner = models.Person.query.filter_by(username=data['winner']).first()
     winner.score = winner.score+1

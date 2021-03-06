@@ -3,6 +3,7 @@ import './App.css';
 import './Board1.css';
 import {Board} from './Board.js';
 import {User} from './User.js';
+import {Rank} from './Rank.js';
 import {Tchat} from './Tchat.js';
 import { useState, useRef, useEffect } from 'react';
 import io from 'socket.io-client';
@@ -29,11 +30,7 @@ const socket = io(); // Connects to socket connection
   const [rank,updaterank] = useState([]);
  // const [score, updatescore]=useState({});
  
- 
- 
-  
- 
-  
+
   useEffect(() => {
    
      socket.on('newrank', (data) => {
@@ -136,12 +133,15 @@ function addEmoji(emoji) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+      //onclick();
       const win=dic[board[a]];
       const index = lst.indexOf(board[a]);
       lst.splice(index,1);
       const looser=dic[lst[0]];
       
       socket.emit('winner', { winner: win,looser:looser });
+      socket.emit('rank', { });
+      
       return (<div><div> GAME OVER { win } WON THE GAME  </div>
       <div> CLICK ON RESTART TO PLAY AGAIN</div></div>);
       
@@ -200,6 +200,8 @@ function onclick(index){
 
        
       }
+      //update screen to display new score
+     else {onclick();}
      
       
       }
@@ -209,7 +211,7 @@ function onclick(index){
    if( myArray.includes(socket.id))
    {
    board.fill(null);
-   onclick(0);
+   onclick();
   
   socket.emit('newboard', { board: board });
   
@@ -232,7 +234,7 @@ function onclick(index){
      
    function showboard(){
     
-    
+    socket.emit('rank', { });
     const email2 = email.current.value;
     
    const newuser=[...user];
@@ -271,7 +273,7 @@ function onclick(index){
    }
    
    function showrank(){
-   socket.emit('rank', { });
+   
     setshow((prevShow)=>{
      return !prevShow;
     });
@@ -331,9 +333,10 @@ function onclick(index){
         </tr>
     </thead>
     <tbody>
-        <tr>
-        {rank.map((user) => (<tr>{user} </tr> ))}
-        </tr>
+        
+        {rank.map((item)=> <Rank value= {item}  />)}
+        
+       
     </tbody>
 </table>
  
