@@ -7,6 +7,7 @@ from dotenv import load_dotenv, find_dotenv
 import os
 import models
 from datetime import date
+from sqlalchemy import desc
 load_dotenv(find_dotenv())
 
 app = Flask(__name__, static_folder='./build/static')
@@ -18,7 +19,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 import models
-#db.create_all()
+db.create_all()
 
 # IMPORTANT: This must be AFTER creating db variable to prevent
 # circular import issues
@@ -73,6 +74,7 @@ def foo2(data): # data is whatever arg you pass in your emit call on client
 @socketio.on('newdic')
 def foo5(data): # data is whatever arg you pass in your emit call on client
     socketio.emit('dicrecieved',  data, broadcast=True, include_self=False)
+    print(data)
     if len(data['dic'])>1:
         x=date.today()
        
@@ -119,7 +121,7 @@ def foo12(data):
 @socketio.on('rank')
 def foo13(data):
     
-    all_people = models.Person.query.all()
+    all_people = models.Person.query.order_by(desc('score')).all()
     users = []
     
     for person in all_people:
@@ -130,7 +132,7 @@ def foo13(data):
     socketio.emit('newrank',users, broadcast=True, include_self=False)   
     
 if __name__ == "__main__":
-    db.create_all()
+    #db.create_all()
     socketio.run(
     app,
     host=os.getenv('IP', '0.0.0.0'),
