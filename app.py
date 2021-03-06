@@ -131,7 +131,7 @@ def foo13(data):
     socketio.emit('newrank',users, broadcast=True, include_self=False)   
     
 if __name__ == "__main__":
-    #db.create_all()
+    db.create_all()
     socketio.run(
     app,
     host=os.getenv('IP', '0.0.0.0'),
