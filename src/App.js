@@ -26,7 +26,6 @@ const socket = io(); // Connects to socket connection
   const tchat=useRef(null);
   const [turn, updateturn] = useState([]);
   const [dic, updatedic]=useState({});
-  //const [username,updateusername] = useState([]);
   const [rank,updaterank] = useState([]);
  // const [score, updatescore]=useState({});
  
@@ -41,16 +40,6 @@ const socket = io(); // Connects to socket connection
       {newrank.push(data[x]);}
       //newrank=newrank[0];
       updaterank(newrank);
-      
-      
-      
-      //const newusername=[...username];
-      //for (const y in data['username']){
-      //newusername.push(data['username'][y]);}
-     
-      //updateusername(newusername);
-      //console.log(newusername);
-      //console.log(newrank);
        
     }); 
     
