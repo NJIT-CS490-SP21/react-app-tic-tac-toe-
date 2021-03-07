@@ -3,26 +3,28 @@
 ## Requirements
 1. `npm install`
 2. `pip install -r requirements.txt`
-3. `pip install flask_socketio `
 
 ## Run Application
 1. Run command in terminal (in your project directory): `python app.py`
 2. Run command in another terminal, `cd` into the project directory, and run `npm run start`
 3. Preview web page in browser '/'
 
-##  Heroku
-herouku link: 'https://guarded-caverns-97315.herokuapp.com/'
-1. Create a Heroku app: `heroku create --buildpack heroku/python`
-2. Add nodejs buildpack: `heroku buildpacks:add --index 1 heroku/nodejs`
-3. Push to Heroku: `git push heroku main`
+##  Heroku (https://essos11.herokuapp.com )
 
-##technical problem
-1.could not push to github because the remote directory was still from previous push which i did not know, i googled and found an article on github commands which explained i had to change the remote repository to the new one i just created 
-2.could not deploy the app on herokou i keep getting error for the socket missing module because it keeps looking in python2 module insted of python3 and python2 does not support flask_socketio anymore. i spent a lot of time researching on google how to fix it but unfortunatly could not find a solution 
+### to create a new Heroku app
+1.`heroku login` -i anf fill credentials
+2.`heroku create` 
+3. `heroku addons:create heroku-postgresql:hobby-dev` (to add a database)
+4. Add nodejs buildpack: `heroku buildpacks:add --index 1 heroku/nodejs`
+5. `heroku config` copy the heroku url and paste it in .env
+6. Push to Heroku: `git push heroku main`
 
-##technical problem
-1. same user can log in many times. If i had more time i could create a list of usera that's already logged in emmit and each time a user log in add his socket id to the list he cant log in no more
-2. I wanted to add a log out button to remove any user from the user list when they log out by listening to the server once receiving disconnected i just used the user socket id to identify the user and remvove from the user list he can't no more see the board
+##Known problem
+There is not problem with the app if i had more time i could improve the tchat by adding emoji and make it more interacitve  
+
+##technical Issues
+1. Had a problem to display the leaderbord on first click had to click on one tab and click on the other tab in order to disply it. I read in Slack group someone had similar issue and the solution was to change in the server when emiting include_self=False to True so the client who emit receive emit back too.
+2. Had a problem running the app from with Heroku i kep getting error URL not found i googled it and found a solution in stackoverflow.com can't find the link anymore but i was missg nodejs buildpack. The app was stoping on the HTML file and could not find the js node. so run `heroku buildpacks:add --index 1 heroku/nodejs` and it fixed it 
 
 # project2-gnn3
 
