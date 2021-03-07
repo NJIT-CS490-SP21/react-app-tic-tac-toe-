@@ -223,7 +223,9 @@ function onclick(index){
       updatetchat(newtchat);
     socket.emit('message', { message:newtchat });
     return(<div> {dic[socket.id]} </div>);
-     }
+     
+   
+  }
      
    function showboard(){
     
@@ -356,7 +358,7 @@ function onclick(index){
     
     <thead>
         <tr>
-            <th colSpan="2">Leader Board</th>
+            <th colSpan="2">   Leader Board</th>
         </tr>
     </thead>
     <tbody>
