@@ -54,7 +54,7 @@ const socket = io(); // Connects to socket connection
        
     }); 
     
-     socket.on('newboard', (data) => {
+     socket.on('newboard2', (data) => {
      
       const newboard=[...data.board];
  
@@ -108,15 +108,7 @@ const socket = io(); // Connects to socket connection
     
     
   }, []);
-function addEmoji(emoji) {
-      const { newMessage } = this.state;
-      const text = `${newMessage}${emoji.native}`;
 
-      this.setState({
-        newMessage: text,
-        showEmojiPicker: false,
-      });
-    }
 
  //calculate winner
  function winner(board) {
@@ -212,7 +204,7 @@ function onclick(index){
    if( myArray.includes(socket.id))
    {
    board.fill(null);
-   onclick();
+  // onclick();
   
   socket.emit('newboard', { board: board });
   
@@ -284,6 +276,7 @@ function onclick(index){
      return !prevShow;
     });
    }
+   
    function Search()
    { 
     const searchs = search.current.value;
