@@ -2,16 +2,16 @@
 import './App.css';
 import './Board1.css';
 import {Board} from './Board.js';
-<<<<<<< HEAD
-=======
+
+
 import {User} from './User.js';
 import {Tchat} from './Tchat.js';
->>>>>>> milestone_1
+
 import { useState, useRef, useEffect } from 'react';
 import io from 'socket.io-client';
 const socket = io(); // Connects to socket connection
 
-<<<<<<< HEAD
+
 
 function App() {
   
@@ -376,7 +376,7 @@ function onclick(index){
    </div> 
    
    
->>>>>>> milestone_1
+
   );
 }
 

@@ -6,8 +6,6 @@ from flask_cors import CORS
 app = Flask(__name__, static_folder='./build/static')
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-<<<<<<< HEAD
-=======
 
 socketio = SocketIO(
     app,
@@ -15,7 +13,6 @@ socketio = SocketIO(
     json=json,
     manage_session=False
 )
->>>>>>> milestone_1
 
 socketio = SocketIO(
     app,
@@ -33,11 +30,7 @@ def index(filename):
 # When a client connects from this Socket connection, this function is run
 @socketio.on('connect')
 def on_connect():
-<<<<<<< HEAD
     
-=======
-    print('user connected')
->>>>>>> milestone_1
     socketio.emit('connect',  broadcast=True, include_self=False)
 # When a client disconnects from this Socket connection, this function is run
 @socketio.on('disconnect')
@@ -48,21 +41,14 @@ def on_disconnect():
 # 'chat' is a custom event name that we just decided
 @socketio.on('board')
 def on_click(data): # data is whatever arg you pass in your emit call on client
-<<<<<<< HEAD
     print(str(data))
-=======
->>>>>>> milestone_1
    
     # This emits the 'chat' event from the server to all clients except for
     # the client that emmitted the event that triggered this function
     socketio.emit('board',  data, broadcast=True, include_self=False)
 @socketio.on('newboard')
 def foo(data): # data is whatever arg you pass in your emit call on client
-<<<<<<< HEAD
-    print(data)
-=======
     
->>>>>>> milestone_1
     socketio.emit('newboard',  data, broadcast=True, include_self=False)
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 @socketio.on('login')
@@ -72,26 +58,11 @@ def foo1(data): # data is whatever arg you pass in your emit call on client
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 @socketio.on('message')
 def foo2(data): # data is whatever arg you pass in your emit call on client
-<<<<<<< HEAD
-    print(data)
-=======
    
->>>>>>> milestone_1
     socketio.emit('newmessage',  data, broadcast=True, include_self=False)
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 @socketio.on('turn')
 def foo3(data): # data is whatever arg you pass in your emit call on client
-<<<<<<< HEAD
-    print(data)
-    socketio.emit('newturn',  data, broadcast=True, include_self=False)
-# Note that we don't call app.run anymore. We call socketio.run with app arg
-
-@socketio.on('clientid')
-def goo(data):
-    if len(lst)<2 and data not in lst:
-        lst.append(data)
-    socketio.emit('user',lst, broadcast=True, include_self=False)
-=======
     
     socketio.emit('newturn',  data, broadcast=True, include_self=False)
 # Note that we don't call app.run anymore. We call socketio.run with app arg
@@ -106,7 +77,6 @@ def foo01(data):
     socketio.emit('newlogin2',data, broadcast=True, include_self=False)
     
     
->>>>>>> milestone_1
 socketio.run(
     app,
     host=os.getenv('IP', '0.0.0.0'),
