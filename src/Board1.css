@@ -1,17 +1,20 @@
 .board {
-	width: 300px; /* Total horizontal dimensions */
-	height: 300px; /* Total vertical dimensions */
-	display: grid; /* Enables CSS Grid */ 
-	grid-template-columns: repeat(3, 1fr); /* Total horizontal space broken into 3 columns */
-  grid-template-rows: repeat(3, 1fr); /* Total vertical space broken into 3 rows */
-  
+  width: 300px; /* Total horizontal dimensions */
+  height: 300px; /* Total vertical dimensions */
+  display: grid; /* Enables CSS Grid */
+  grid-template-columns: repeat(
+    3,
+    1fr
+  ); /* Total horizontal space broken into 3 columns */
+  grid-template-rows: repeat(
+    3,
+    1fr
+  ); /* Total vertical space broken into 3 rows */
+
   grid-gap: 10px;
   position: fixed; /* or absolute */
   top: 30%;
   left: 35%;
- 
-  
-   
 }
 
 .box {
@@ -19,125 +22,107 @@
   background-color: lightblue;
   text-align: center;
 
-  font-size:40px ;
-  font-weight:bold;
-  
+  font-size: 40px;
+  font-weight: bold;
 }
-.login{
-    position: fixed;
-     top: 20%;
-    left: 35%;
-    
+.login {
+  position: fixed;
+  top: 20%;
+  left: 35%;
 }
-.tchat_box{
-    
- position: fixed; /* or absolute */
+.tchat_box {
+  position: fixed; /* or absolute */
   top: 60%;
   left: 75%;
   text-decoration: underline overline;
   text-shadow: 2px 2px 5px red;
 }
-.tchat{
-    position: fixed; /* or absolute */
+.tchat {
+  position: fixed; /* or absolute */
   top: 50%;
   left: 65%;
-   width: 50%;
+  width: 50%;
   padding: 15px;
   margin: 5px 0 22px 0;
- border: 3px solid black;
+  border: 3px solid black;
   background: #f1f1f1;
   resize: none;
   height: 500px;
-    width: 530px;
-   
-    
-    
+  width: 530px;
 }
-.user{
-    position: fixed; /* or absolute */
+.user {
+  position: fixed; /* or absolute */
   top: 15%;
   left: 73%;
   text-decoration: underline overline;
   text-shadow: 2px 2px 5px red;
-  
 }
-.list{
-    position: fixed;
-   top: 20%;
+.list {
+  position: fixed;
+  top: 20%;
   left: 73%;
   text-shadow: 2px 2px 5px green;
-    
-}    
-    
-
-.reset{
-    position: fixed;
-     top: 80%;
-     left: 45%;
-     
-    
 }
 
-.win{
-    position: fixed;
-     top: 90%;
-     left: 35%;
-     
-    text-shadow: 2px 2px 5px red;
+.reset {
+  position: fixed;
+  top: 80%;
+  left: 45%;
 }
-.title{
-    text-shadow: 2px 2px 5px red;
-    position: fixed;
-     top: 5%;
-    left: 31%;
-    text-decoration: underline overline;
-    
+
+.win {
+  position: fixed;
+  top: 90%;
+  left: 35%;
+
+  text-shadow: 2px 2px 5px red;
 }
-button{
-   
+.title {
+  text-shadow: 2px 2px 5px red;
+  position: fixed;
+  top: 5%;
+  left: 31%;
+  text-decoration: underline overline;
+}
+button {
   cursor: pointer;
   border-radius: 50%;
 }
-textarea{
-   padding: 25px 42px; 
+textarea {
+  padding: 25px 42px;
 }
-.input1{
-   padding: 5px 15px; 
+.input1 {
+  padding: 5px 15px;
 }
 table,
 td {
-    border: 2px solid #333;
+  border: 2px solid #333;
 }
 
 thead,
 tfoot {
-    background-color: #333;
-    color: #fff;
+  background-color: #333;
+  color: #fff;
 }
 
-p{
-    text-shadow: 2px 2px 5px green;
+p {
+  text-shadow: 2px 2px 5px green;
 }
-.center{
-    position: fixed;
-     top: 20%;
-     left: 5%;
-     width: 25%;
-     text-shadow: 2px 2px 5px red;
-    
+.center {
+  position: fixed;
+  top: 20%;
+  left: 5%;
+  width: 25%;
+  text-shadow: 2px 2px 5px red;
 }
-.rank{
-    position: fixed;
-     top: 7%;
-     left: 15%;
-     
-    
+.rank {
+  position: fixed;
+  top: 7%;
+  left: 15%;
 }
-.search{
-    position: fixed;
-     top: 13%;
-     left: 7%;
-      padding: 5px 15px; 
-     
-    
+.search {
+  position: fixed;
+  top: 13%;
+  left: 7%;
+  padding: 5px 15px;
 }

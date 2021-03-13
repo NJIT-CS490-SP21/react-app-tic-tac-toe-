@@ -1,9 +1,7 @@
-       export function User (props)
-       
-        {
-        
-        return(
-       <div>
-
-          <li>{props.value}</li>
-          </div>);}
+export function User(props) {
+  return (
+    <div>
+      <li>{props.value}</li>
+    </div>
+  );
+}

@@ -1,9 +1,7 @@
- export function Tchat (props)
-       
-        {
-        
-        return(
-       <div>
-
-          <li>{props.value}</li>
-          </div>);}
+export function Tchat(props) {
+  return (
+    <div>
+      <li>{props.value}</li>
+    </div>
+  );
+}

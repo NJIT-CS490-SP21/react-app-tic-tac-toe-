@@ -1,12 +1,3 @@
-export function ListItem(props){
-    
-return (
-   
-  
-<li> {props.name} </li>
- 
- 
-  
-);
-  
+export function ListItem(props) {
+  return <li> {props.name} </li>;
 }
