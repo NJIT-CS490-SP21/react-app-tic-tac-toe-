@@ -2,15 +2,122 @@
 import './App.css';
 import './Board1.css';
 import {Board} from './Board.js';
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> bc60d70e8cd1ecbee87a81a98bf69b325f804663
 import {User} from './User.js';
 import {Rank} from './Rank.js';
 //import { Button } from 'react-bootstrap';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import {Tchat} from './Tchat.js';
+<<<<<<< HEAD
+
+import { useState, useRef, useEffect } from 'react';
+import io from 'socket.io-client';
+const socket = io(); // Connects to socket connection
+
+
+
+function App() {
+  
+  const [board, setBoard] = useState(Array(9).fill(null));
+  const [myArray, updateMyArray] = useState([]);
+  const [user, updateuser] = useState([]);
+  const [isShown, setshown] = useState(true);
+  const [tchat2, updatetchat] = useState([]);
+  const email=useRef(null);
+   const tchat=useRef(null);
+ 
+  
+ 
+  
+  
+  useEffect(() => {
+     socket.on('newboard', (data) => {
+     
+      const newboard=[...data.board];
+ 
+      setBoard(newboard);
+       
+    }); 
+    socket.on('connect', () => {
+     const cid=socket.id;
+     socket.emit('clientid', { cid: cid });
+
+      
+    });
+    socket.on('user', (data) => {
+     const array=[...myArray];
+     
+      array.push(data);
+      updateMyArray(array);
+      
+    });
+    
+  }, []);
+
+//console.log(myArray);
+function onclick(index){
+       
+       const x=socket.id;
+       //console.log(x);
+      if (x==myArray[0][1]['cid'])
+     { 
+      const newboard=[...board];
+      
+       newboard[index]= "0" ;
+     
+      setBoard(newboard);
+      socket.emit('board', { index: index });
+      socket.emit('newboard', { board: newboard });}
+      
+      else if (x==myArray[0][0]['cid'])
+     { 
+       
+      const new_board=[...board];
+     
+       new_board[index]= "X" ;
+     
+      setBoard(new_board);
+      socket.emit('board', { index: index });
+      socket.emit('newboard', { board: new_board });}
+      
+}
+
+  
+  function login ()
+  {
+   const email2 = email.current.value;
+   const newuser=[...user];
+     
+      newuser.push(email2);
+      updateuser(newuser);
+     }
+   
+   
+  function tchatf ()
+  {
+   const tchat1 = tchat.current.value;
+   const newtchat=[...tchat2];
+     
+      newtchat.push(tchat1);
+      updatetchat(newtchat);
+     }
+   function showboard(){
+    //login();
+    setshown((prevShown)=>{
+     return !prevShown;
+    });
+   }
+    
+=======
 import { useState, useRef, useEffect } from 'react';
 import io from 'socket.io-client';
 //import 'emoji-mart/css/emoji-mart.css';
 //import { Picker } from 'emoji-mart';
+>>>>>>> bc60d70e8cd1ecbee87a81a98bf69b325f804663
 
 const socket = io(); // Connects to socket connection
 
@@ -377,6 +484,10 @@ function onclick(index){
    </div> 
    
    
+<<<<<<< HEAD
+
+=======
+>>>>>>> bc60d70e8cd1ecbee87a81a98bf69b325f804663
   );
 }
 

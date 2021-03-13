@@ -22,6 +22,15 @@ db.create_all()
 # circular import issues
 #from models import Person
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
+socketio = SocketIO(
+    app,
+    cors_allowed_origins="*",
+    json=json,
+    manage_session=False
+)
+
+
 socketio = SocketIO(
     app,
     cors_allowed_origins="*",
@@ -36,6 +45,8 @@ def index(filename):
 # When a client connects from this Socket connection, this function is run
 @socketio.on('connect')
 def on_connect():
+    
+    socketio.emit('connect',  broadcast=True, include_self=False)
     print('user connected')
     socketio.emit('connect', broadcast=True, include_self=False)
 # When a client disconnects from this Socket connection, this function is run
@@ -46,11 +57,16 @@ def on_disconnect():
 # 'chat' is a custom event name that we just decided
 @socketio.on('board')
 def on_click(data): # data is whatever arg you pass in your emit call on client
+    print(str(data))
+   
+
     # This emits the 'chat' event from the server to all clients except for
     # the client that emmitted the event that triggered this function
     socketio.emit('board', data, broadcast=True, include_self=False)
 @socketio.on('newboard')
 def foo(data): # data is whatever arg you pass in your emit call on client
+    
+    socketio.emit('newboard',  data, broadcast=True, include_self=False)
     socketio.emit('newboard2', data, broadcast=True, include_self=True)
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 # Note that we don't call app.run anymore. We call socketio.run with app arg
@@ -78,12 +94,29 @@ def foo5(data): # data is whatever arg you pass in your emit call on client
 @socketio.on('turn')
 def foo3(data): # data is whatever arg you pass in your emit call on client
     socketio.emit('newturn', data, broadcast=True, include_self=False)
+   
+    socketio.emit('newmessage',  data, broadcast=True, include_self=False)
+# Note that we don't call app.run anymore. We call socketio.run with app arg
+@socketio.on('turn')
+def foo3(data): # data is whatever arg you pass in your emit call on client
+    
+    socketio.emit('newturn',  data, broadcast=True, include_self=False)
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 @socketio.on('newlogin')
 def foo11(data):
     socketio.emit('newuser', data, broadcast=True, include_self=False)
 @socketio.on('login2')
 def foo01(data):
+    print(data)
+    socketio.emit('newlogin2',data, broadcast=True, include_self=False)
+    
+    
+socketio.run(
+    app,
+    host=os.getenv('IP', '0.0.0.0'),
+    port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
+    debug=True
+)
     socketio.emit('newlogin2', data, broadcast=True, include_self=False)
 @socketio.on('winner')
 def foo12(data):
