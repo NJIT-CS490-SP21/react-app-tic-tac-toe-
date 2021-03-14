@@ -254,7 +254,7 @@ function App() {
         <h1> WELCOME TO THE GAME </h1>
       </div>
       <div className="user">Users Connected</div>
-
+      {!isShown &&
       <div className="login">
         <input className="input1" ref={email} type="text" />
 
@@ -267,7 +267,7 @@ function App() {
           Log in
         </button>
       </div>
-
+     }
       <div className="list">
         {user.map((item) => (
           <User value={item} />
