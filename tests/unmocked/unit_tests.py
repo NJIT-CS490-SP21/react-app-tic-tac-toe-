@@ -1,14 +1,8 @@
-
-
-
 import os 
 import sys
 sys.path.append(os.path.abspath('../../'))
 import unittest
-from app import foo5
-from app import foo12
-from app import foo13
-from app import add_user
+from app import get_user_score
 import models
 from datetime import date
 import unittest
@@ -17,51 +11,46 @@ INPUT='input'
 INITIAL_USER = "Gabin"
 INITIAL_USER2="essos"
 EXPECTED_OUTPUT = "expected"
-intitial_user=models.Person(username=INITIAL_USER, score=100,date=date.today())
-
-lst=[intitial_user.username]
+intitial_user=models.Person(username=INITIAL_USER, score=90,date=date.today())
+lst=[intitial_user]
 
 class UpdateUserTestCase(unittest.TestCase):
     def setUp(self):
         self.success_test_params = [
             {
-                INPUT: ['user2',
+                INPUT: 'user2',
                      
-                    'user1'],
                     
-                
-                EXPECTED_OUTPUT: ['Gabin','user1','user2']
+                EXPECTED_OUTPUT: [['Gabin','user2'],[90,100]]
             },
             {
-               INPUT : ['user3',
+               INPUT : 'user3',
                      
-                    'user4'],
+                    
                     
                 
-                EXPECTED_OUTPUT: ['user3','user4']
+                EXPECTED_OUTPUT:[['Gabin','user2','user3'],[90,100,100]]
             },
             {
-               INPUT: ['user5']
+               INPUT: []
                      
                     ,
                     
                 
-                EXPECTED_OUTPUT:[ ]
+                EXPECTED_OUTPUT:[[],[]]
             }
             
         ]
             
-   
-    
         
-    def test_add_user(self):
+    def test_get_user_score(self):
+        global lst
         for test in self.success_test_params:
-            lst.append(models.Person(username=test[INPUT][0], score=100,date=date.today()))
-            lst.append(models.Person(username=test[INPUT][1], score=100,date=date.today()))
-            
-            
-            actual_result= add_user(lst)
-            print(test[INPUT])
+            lst.append(models.Person(username=test[INPUT], score=100,date=date.today()))
+            if test[INPUT]==[]:
+                lst=[]
+            actual_result= get_user_score(lst)
+            print(actual_result)
             expected_result = test[EXPECTED_OUTPUT]
             print(expected_result)
             self.assertEqual(actual_result,expected_result)

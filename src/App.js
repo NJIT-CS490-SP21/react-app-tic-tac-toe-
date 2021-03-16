@@ -111,18 +111,17 @@ function App() {
         return (
           <div>
             <div>
-              {' '}
+              {'  '}
               GAME OVER
               { win }
-              {' '}
+              {'  '}
               WON THE GAME
               {' '}
             </div>
             <div> CLICK ON RESTART TO PLAY AGAIN</div>
           </div>
         );
-      }
-      if (!board2.includes(null)) {
+      } if (!board2.includes(null)) {
         return (
           <div>
             <div> GAME OVER TIE GAME </div>
@@ -160,7 +159,7 @@ function App() {
           newboard3[index] = 'O';
 
           setBoard(newboard3);
-          socket.emit('board', { index });
+          // socket.emit('board', { index });
           socket.emit('newboard', { board: newboard3 });
         }
         const newturn = [...turn];
@@ -264,13 +263,13 @@ function App() {
       <div className="user">
         Users Connected
       </div>
+      {!isShown ? (
+        <div className="login">
+          <input className="input1" ref={email} type="text" />
 
-      <div className="login">
-        <input className="input1" ref={email} type="text" />
-
-        <button type="button" onClick={() => { showboard(); }}> Log in</button>
-      </div>
-
+          <button type="button" onClick={() => { showboard(); }}> Log in</button>
+        </div>
+      ) : null}
       <div className="list">
         {user.map((item) => <User value={item} />)}
       </div>

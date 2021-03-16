@@ -1,16 +1,16 @@
 import os
 import sys
-
+from unittest import TestCase
+from flask import Flask, session
 sys.path.append(os.path.abspath('../../'))
 import unittest
 import unittest.mock as mock
 from unittest.mock import patch
 import models
+from app import APP
 from datetime import date
 from app import add_user
 from app import get_all_users
-from app import foo12
-from app import foo13
 
 INPUT = ""
 EXPECTED_OUTPUT = "expected"
@@ -31,6 +31,7 @@ dict = {'user1': 100, 'user2': 100}
 
 class UpdateUserTestCase(unittest.TestCase):
     def setUp(self):
+        
         self.success_test_params = [{
             INPUT: {
                 'dic': {
@@ -76,23 +77,25 @@ class UpdateUserTestCase(unittest.TestCase):
 
     def mocked_commit(self):
         pass
+    def mocked_emit(self,foo, data, broadcast=True, include_self=False):
+        pass
 
     def test_add_user(self):
         for test in self.success_test_params:
-
+           
             with patch('models.Person.query') as mocked_query:
                 mocked_query.all = self.mocked_person
-                with patch('app.db.session.add', self.mocked_add):
-                    with patch('app.db.session.commit', self.mocked_commit):
+                with patch('app.DB.session.add', self.mocked_add):
+                    with patch('app.DB.session.commit', self.mocked_commit):
+                        with patch('app.SOCKETIO.emit', self.mocked_emit):
 
-                        actual_result = add_user(test[INPUT])
+                            actual_result = add_user(test[INPUT])
 
-                        expected_result = test[EXPECTED_OUTPUT]
+                            expected_result = test[EXPECTED_OUTPUT]
 
-                        self.assertEqual(len(actual_result),
+                            self.assertEqual(len(actual_result),
                                          len(expected_result))
-                        self.assertEqual(actual_result, expected_result)
-
+                            self.assertEqual(actual_result, expected_result)
     def mocked_order(self):
         return lst
 
