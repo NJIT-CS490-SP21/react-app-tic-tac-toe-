@@ -1,7 +1,10 @@
+import React from 'react';
+
 export function User(props) {
+  const foo = props;
   return (
     <div>
-      <li>{props.value}</li>
+      <li>{foo.value}</li>
     </div>
   );
 }

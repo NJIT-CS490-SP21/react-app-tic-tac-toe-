@@ -1,53 +1,114 @@
+import os
+import sys
 
-
+sys.path.append(os.path.abspath('../../'))
 import unittest
 import unittest.mock as mock
 from unittest.mock import patch
-
-from app import foo5
+import models
+from datetime import date
+from app import add_user
+from app import get_all_users
 from app import foo12
 from app import foo13
 
-INPUT = "input_artist_ids"
+INPUT = ""
 EXPECTED_OUTPUT = "expected"
+INITIAL_USER = 'Gabin'
+
+intitia_user = models.Person(username=INITIAL_USER,
+                             score=100,
+                             date=date.today())
+intitia_user2 = models.Person(username='user11', score=100, date=date.today())
+intitia_user3 = models.Person(username='user21', score=100, date=date.today())
+intitia_user4 = models.Person(username='user31', score=100, date=date.today())
+lst2 = [intitia_user]
+lst = [intitia_user]
+lst3 = [INITIAL_USER]
+d = {}
+dict = {'user1': 100, 'user2': 100}
+
 
 class UpdateUserTestCase(unittest.TestCase):
     def setUp(self):
-        self.success_test_params = [
-            {
-                INPUT:  [
-                    '0Y5tJX1MQlPlqiwlOH1tJY', # Travis Scott
-                    '4yvcSjfu4PC0CYQyLy4wSq', # Glass Animals
-                    '3MZsBdqDrRTJihTHQrO6Dq', # Joji
-                    '1Xyo4u8uXC1ZmMpatF05PJ', # The Weeknd
-                ],
-                EXPECTED_OUTPUT: 'https://api.spotify.com/v1/artists/0Y5tJX1MQlPlqiwlOH1tJY/top-tracks'
+        self.success_test_params = [{
+            INPUT: {
+                'dic': {
+                    'X': 'user1',
+                    'O': 'user2'
+                }
             },
-            # TODO add another test case for when the input is None
-        ]
-   
-    def add(self,user):
-        return self.success_test_params[0][INPUT][0]
-        
-        
+            EXPECTED_OUTPUT: [INITIAL_USER, 'user1', 'user2']
+        }, {
+            INPUT: {
+                'dic': {
+                    'X': 'user3',
+                    'O': 'user4'
+                }
+            },
+            EXPECTED_OUTPUT:
+            [INITIAL_USER, 'user1', 'user2', 'user3', 'user4']
+        }, {
+            INPUT: {
+                'dic': {
+                    'X': 'user5'
+                }
+            },
+            EXPECTED_OUTPUT:
+            [INITIAL_USER, 'user1', 'user2', 'user3', 'user4']
+        }]
+        self.success_test_params2 = [{
+            INPUT: intitia_user2,
+            EXPECTED_OUTPUT: ''
+        }, {
+            INPUT: intitia_user3,
+            EXPECTED_OUTPUT: ''
+        }, {
+            INPUT: intitia_user4,
+            EXPECTED_OUTPUT: ''
+        }]
+
+    def mocked_person(self):
+        return lst2
+
+    def mocked_add(self, user):
+        lst2.append(user)
+
+    def mocked_commit(self):
+        pass
+
     def test_add_user(self):
         for test in self.success_test_params:
-            # TODO: Mock random.choice to always return the 0 index
-            #with patch('get_tracks.random.choice',test[INPUT][0]):
-            with patch('get_tracks.random.choice',self.add):  
-            # Look at app_test.py from the demo for example
-            
-            # TODO: Make a call to add user with your test inputs
-            # then assign it to a variable
-                actual_result = get_artist_url(test[INPUT])
-            
-            # Assign the expected output as a variable from test
-                expected_result = test[EXPECTED_OUTPUT]
 
-            # Use assert checks to see compare values of the results
-                self.assertEqual(len(actual_result),len(expected_result))
-                self.assertEqual(actual_result,expected_result)
-             
+            with patch('models.Person.query') as mocked_query:
+                mocked_query.all = self.mocked_person
+                with patch('app.db.session.add', self.mocked_add):
+                    with patch('app.db.session.commit', self.mocked_commit):
+
+                        actual_result = add_user(test[INPUT])
+
+                        expected_result = test[EXPECTED_OUTPUT]
+
+                        self.assertEqual(len(actual_result),
+                                         len(expected_result))
+                        self.assertEqual(actual_result, expected_result)
+
+    def mocked_order(self):
+        return lst
+
+    def test_get_all_user(self):
+        for test in self.success_test_params2:
+
+            lst.append(test[INPUT])
+            lst3.append(test[INPUT].username)
+            with patch('models.Person.query') as mocked_query2:
+                mocked_query2.all = self.mocked_order
+                actual_result = get_all_users()
+
+                expected_result = lst3
+
+                self.assertEqual(len(actual_result), len(expected_result))
+                self.assertEqual(actual_result, expected_result)
 
 
 if __name__ == '__main__':

@@ -1,8 +1,18 @@
+import React from 'react';
+// import PropTypes from 'prop-types';
+
 export function Board(props) {
+  const foo = props;
+
   return (
-    <div className="box" onClick={props.name}>
-      {" "}
-      {props.value}
+    <div
+      role="button"
+      tabIndex={0}
+      className="box"
+      onClick={foo.name}
+      onKeyDown={null}
+    >
+      {foo.value}
     </div>
   );
 }
