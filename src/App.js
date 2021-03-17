@@ -99,7 +99,7 @@ function App() {
     for (let i = 0; i < lines.length; i += 1) {
       const [a, b, c] = lines[i];
       if (board2[a] && board2[a] === board2[b] && board2[a] === board2[c]) {
-      // onclick();
+        // onclick();
         const win = dic[board2[a]];
         const index = lst.indexOf(board2[a]);
         lst.splice(index, 1);
@@ -111,9 +111,9 @@ function App() {
         return (
           <div>
             <div>
-              {'  '}
               GAME OVER
-              { win }
+              {'  '}
+              {win}
               {'  '}
               WON THE GAME
               {' '}
@@ -121,7 +121,8 @@ function App() {
             <div> CLICK ON RESTART TO PLAY AGAIN</div>
           </div>
         );
-      } if (!board2.includes(null)) {
+      }
+      if (!board2.includes(null)) {
         return (
           <div>
             <div> GAME OVER TIE GAME </div>
@@ -152,7 +153,7 @@ function App() {
           updateturn(newturn);
           socket.emit('turn', { turn: newturn });
 
-        // adding 2nd connected user to list and assiging 'O'
+          // adding 2nd connected user to list and assiging 'O'
         } else if (x === myArray[1] && turn[0] !== x) {
           const newboard3 = [...board];
 
@@ -168,17 +169,18 @@ function App() {
         socket.emit('turn', { turn: newturn });
       }
 
-    // update screen to display new score
-    } else { onclick(); }
+      // update screen to display new score
+    } else {
+      socket.emit('newboard', { board });
+    }
   }
 
   // Only Palyers can reset the board
   function restart() {
     if (myArray.includes(socket.id)) {
       board.fill(null);
-      // onclick();
-
       socket.emit('newboard', { board });
+      // onclick();
     }
   }
 
@@ -260,75 +262,107 @@ function App() {
       <div className="title">
         <h1> WELCOME TO THE GAME </h1>
       </div>
-      <div className="user">
-        Users Connected
-      </div>
+      <div className="user">Users Connected</div>
       {!isShown ? (
         <div className="login">
           <input className="input1" ref={email} type="text" />
 
-          <button type="button" onClick={() => { showboard(); }}> Log in</button>
+          <button
+            type="button"
+            onClick={() => {
+              showboard();
+            }}
+          >
+            {' '}
+            Log in
+          </button>
         </div>
       ) : null}
       <div className="list">
-        {user.map((item) => <User value={item} />)}
+        {user.map((item) => (
+          <User value={item} />
+        ))}
       </div>
 
       {isShown ? (
         <div>
-          <div className="tchat_box">
-            Chat Box!
-          </div>
-          <div className="win">
-            {winner(board)}
-          </div>
+          <div className="tchat_box">Chat Box!</div>
+          <div className="win">{winner(board)}</div>
           <div className="tchat">
-
             <textarea ref={tchat} placeholder="Type message.." />
-            <button type="button" onClick={() => { tchatf(); }}> Post</button>
-            {tchat2.map((item) => <Tchat value={item} />)}
-
+            <button
+              type="button"
+              onClick={() => {
+                tchatf();
+              }}
+            >
+              {' '}
+              Post
+            </button>
+            {tchat2.map((item) => (
+              <Tchat value={item} />
+            ))}
           </div>
 
           <div className="reset">
-            <button type="button" onClick={() => { restart(); }}> Restart</button>
+            <button
+              type="button"
+              onClick={() => {
+                restart();
+              }}
+            >
+              {' '}
+              Restart
+            </button>
           </div>
 
           <div className="board">
-            {board.map((item, index) => <Board name={() => onclick(index)} value={item} />)}
-
+            {board.map((item, index) => (
+              <Board name={() => onclick(index)} value={item} />
+            ))}
           </div>
           <div className="rank">
-            <button type="button" onClick={() => { showrank(); }}> Show rank</button>
+            <button
+              type="button"
+              onClick={() => {
+                showrank();
+              }}
+            >
+              {' '}
+              Show rank
+            </button>
           </div>
           {isShow ? (
             <div className="search">
               <input className="input1" ref={search} type="text" />
               {' '}
-              <button type="button" onClick={() => { Search(); }}> Search </button>
-
+              <button
+                type="button"
+                onClick={() => {
+                  Search();
+                }}
+              >
+                {' '}
+                Search
+                {' '}
+              </button>
               <table className="center">
-
                 <thead>
                   <tr>
-                    <th colSpan="2">   Leader Board</th>
+                    <th colSpan="2"> Leader Board</th>
                   </tr>
                 </thead>
                 <tbody>
-
-                  {rank.map((item, index) => <Rank value={item} data={score[index]} />)}
-
+                  {rank.map((item, index) => (
+                    <Rank value={item} data={score[index]} />
+                  ))}
                 </tbody>
               </table>
             </div>
           ) : null}
-
         </div>
-
       ) : null}
-
     </div>
-
   );
 }
 
