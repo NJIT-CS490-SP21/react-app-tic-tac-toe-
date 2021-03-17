@@ -63,6 +63,7 @@ class UpdateUserTestCase(unittest.TestCase):
     def test_archive_message(self):
         for test in self.success_test_params2:
             actual_result = archive_tchat(test[INPUT])
+
             expected_result = test[EXPECTED_OUTPUT]
             self.assertEqual(actual_result, expected_result)
             self.assertEqual(len(actual_result), len(expected_result))
