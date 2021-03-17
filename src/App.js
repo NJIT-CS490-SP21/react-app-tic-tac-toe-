@@ -1,14 +1,14 @@
-import "./App.css";
-import "./Board1.css";
-import React, { useState, useRef, useEffect } from "react";
-import io from "socket.io-client";
-import { Board } from "./Board.js";
-import { User } from "./User.js";
-import { Rank } from "./Rank.js";
+import './App.css';
+import './Board1.css';
+import React, { useState, useRef, useEffect } from 'react';
+import io from 'socket.io-client';
+import { Board } from './Board.js';
+import { User } from './User.js';
+import { Rank } from './Rank.js';
 
 // import { Button } from 'react-bootstrap';
 // import 'bootstrap/dist/css/bootstrap.min.css';
-import { Tchat } from "./Tchat.js";
+import { Tchat } from './Tchat.js';
 // import 'emoji-mart/css/emoji-mart.css';
 // import { Picker } from 'emoji-mart';
 
@@ -30,7 +30,7 @@ function App() {
   const [score, updatescore] = useState([]);
 
   useEffect(() => {
-    socket.on("newrank", (data) => {
+    socket.on('newrank', (data) => {
       const newrank = [...rank];
       const newscore = [...score];
       for (let x = 0; x < data[0].length; x += 1) {
@@ -47,36 +47,36 @@ function App() {
       updatescore(newscore);
     });
 
-    socket.on("newboard2", (data) => {
+    socket.on('newboard2', (data) => {
       const newboard = [...data.board];
 
       setBoard(newboard);
     });
-    socket.on("newlogin2", (data) => {
+    socket.on('newlogin2', (data) => {
       const newarr = [...data.array];
 
       updateMyArray(newarr);
     });
 
-    socket.on("dicrecieved", (data) => {
+    socket.on('dicrecieved', (data) => {
       const newdic2 = { ...data.dic };
 
       updatedic(newdic2);
       // console.log(newdic2);
     });
-    socket.on("newmessage", (data) => {
+    socket.on('newmessage', (data) => {
       const newtchat = [...data.message];
 
       updatetchat(newtchat);
     });
 
-    socket.on("newuser", (data) => {
+    socket.on('newuser', (data) => {
       const newlog = [...data.user];
 
       updateuser(newlog);
     });
 
-    socket.on("newturn", (data) => {
+    socket.on('newturn', (data) => {
       const newturn = [...data.turn];
 
       updateturn(newturn);
@@ -85,7 +85,7 @@ function App() {
 
   // calculate winner
   function winner(board2) {
-    const lst = ["X", "O"];
+    const lst = ['X', 'O'];
     const lines = [
       [0, 1, 2],
       [3, 4, 5],
@@ -105,8 +105,8 @@ function App() {
         lst.splice(index, 1);
         const looser = dic[lst[0]];
 
-        socket.emit("winner", { winner: win, looser });
-        socket.emit("rank", { user });
+        socket.emit('winner', { winner: win, looser });
+        socket.emit('rank', { user });
 
         return (
           <div>
@@ -143,35 +143,35 @@ function App() {
         if (x === myArray[0] && turn[0] !== x) {
           const newboard = [...board];
 
-          newboard[index] = "X";
+          newboard[index] = 'X';
 
           setBoard(newboard);
-          socket.emit("board", { index });
-          socket.emit("newboard", { board: newboard });
+          socket.emit('board', { index });
+          socket.emit('newboard', { board: newboard });
           const newturn = [...turn];
           newturn[0] = x;
           updateturn(newturn);
-          socket.emit("turn", { turn: newturn });
+          socket.emit('turn', { turn: newturn });
 
           // adding 2nd connected user to list and assiging 'O'
         } else if (x === myArray[1] && turn[0] !== x) {
           const newboard3 = [...board];
 
-          newboard3[index] = "O";
+          newboard3[index] = 'O';
 
           setBoard(newboard3);
           // socket.emit('board', { index });
-          socket.emit("newboard", { board: newboard3 });
+          socket.emit('newboard', { board: newboard3 });
         }
         const newturn = [...turn];
         newturn[0] = x;
         updateturn(newturn);
-        socket.emit("turn", { turn: newturn });
+        socket.emit('turn', { turn: newturn });
       }
 
       // update screen to display new score
     } else {
-      socket.emit("newboard", { board });
+      socket.emit('newboard', { board });
     }
   }
 
@@ -192,8 +192,14 @@ function App() {
 
     newtchat.push(tchat1);
     updatetchat(newtchat);
-    socket.emit("message", { message: newtchat });
-    return <div> {dic[socket.id]} </div>;
+    socket.emit('message', { message: newtchat });
+    return (
+      <div>
+        {' '}
+        {dic[socket.id]}
+        {' '}
+      </div>
+    );
   }
 
   function showboard() {
@@ -206,14 +212,14 @@ function App() {
     }
     newuser.push(email2);
     updateuser(newuser);
-    socket.emit("newlogin", { user: newuser });
+    socket.emit('newlogin', { user: newuser });
 
     const newlog = [...myArray];
     if (myArray.length < 2) {
       newlog.push(socket.id);
       updateMyArray(newlog);
     }
-    socket.emit("login2", { array: newlog });
+    socket.emit('login2', { array: newlog });
 
     const newdic = { ...dic };
     if (socket.id === newlog[0]) {
@@ -223,7 +229,7 @@ function App() {
     }
     updatedic(newdic);
 
-    socket.emit("newdic", { dic: newdic });
+    socket.emit('newdic', { dic: newdic });
 
     if (email2.length > 0) {
       setshown((prevShown) => !prevShown);
@@ -231,7 +237,7 @@ function App() {
   }
 
   function showrank() {
-    socket.emit("rank", { user });
+    socket.emit('rank', { user });
 
     setshow((prevShow) => !prevShow);
   }
@@ -328,7 +334,8 @@ function App() {
           </div>
           {isShow ? (
             <div className="search">
-              <input className="input1" ref={search} type="text" />{" "}
+              <input className="input1" ref={search} type="text" />
+              {' '}
               <button
                 type="button"
                 onClick={() => {
