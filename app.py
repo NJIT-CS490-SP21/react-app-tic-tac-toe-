@@ -36,8 +36,11 @@ SOCKETIO = SocketIO(APP,
 @APP.route('/', defaults={"filename": "index.html"})
 @APP.route('/<path:filename>')
 def index(filename):
-    '''docstring'''
+    '''redirect'''
     return send_from_directory('./build', filename)
+
+
+LST = []
 
 
 # When a client connects from this Socket connection, this function is run
@@ -54,6 +57,7 @@ def on_disconnect():
     '''print when user disconnect'''
     print('User disconnected!')
 
+
 @SOCKETIO.on('newboard')
 def foot(data):  # data is whatever arg you pass in your emit call on client
     '''update all users board when click on restart'''
@@ -63,26 +67,39 @@ def foot(data):  # data is whatever arg you pass in your emit call on client
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 @SOCKETIO.on('message')
-def new_tchat(data):  # data is whatever arg you pass in your emit call on client
+def new_tchat(
+        data):  # data is whatever arg you pass in your emit call on client
     '''nottify other users of new message in tchat'''
     SOCKETIO.emit('newmessage', data, broadcast=True, include_self=False)
+    archive_tchat(data['message'])
+
+
+def archive_tchat(message):
+    '''archive_tchat'''
+    if isinstance(message, str) and len(message) > 0:
+        LST.append(message)
+    return LST
 
 
 @SOCKETIO.on('newdic')
 def add_user(
         data):  # data is whatever arg you pass in your emit call on client
     '''add new user to db'''
-    
+
     users = get_all_users()
     if len(data['dic']) > 1:
         new_date = date.today()
-        new_user = models.Person(username=data['dic']['X'], score=100, date=new_date)
+        new_user = models.Person(username=data['dic']['X'],
+                                 score=100,
+                                 date=new_date)
         if data['dic']['X'] not in users:
             DB.session.add(new_user)
             DB.session.commit()
             users.append(new_user.username)
 
-        new_user2 = models.Person(username=data['dic']['O'], score=100, date=new_date)
+        new_user2 = models.Person(username=data['dic']['O'],
+                                  score=100,
+                                  date=new_date)
         if data['dic']['O'] not in users:
 
             DB.session.add(new_user2)
@@ -90,7 +107,8 @@ def add_user(
             users.append(new_user2.username)
     SOCKETIO.emit('dicrecieved', data, broadcast=True, include_self=False)
     return users
-    
+
+
 def get_all_users():
     '''get all user from db'''
     user = []
@@ -98,6 +116,7 @@ def get_all_users():
     for person in people:
         user.append(person.username)
     return user
+
 
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 @SOCKETIO.on('turn')
@@ -122,7 +141,7 @@ def foo01(data):
 @SOCKETIO.on('winner')
 def udate_score(data):
     '''updating users score in db '''
-    dic = {}
+
     winner = models.Person.query.filter_by(username=data['winner']).first()
     #dic[winner]=winner.score
     winner.score = winner.score + 1
@@ -135,39 +154,41 @@ def udate_score(data):
     #dic[looser]= dic[looser]-1
     DB.session.merge(looser)
     DB.session.commit()
-    all_people = models.Person.query.all()
-    for elm in all_people:
-        dic[elm.username] = elm.score
-    return dic
 
 
 @SOCKETIO.on('rank')
-def foo(data):
+def rank(data):
     ''' emit user and their score'''
-    d=get_user_score(get_all())
-    users=d[0]
-    score=d[1]
-    
-    
+
+    new_d = get_user_score(get_all())
+    users = new_d[0]
+    score = new_d[1]
+
     SOCKETIO.emit('newrank', [users, score, data],
                   broadcast=True,
                   include_self=True)
-    
-def get_user_score( all_people):
+
+
+def get_user_score(all_people):
     '''get users and score from db'''
-    
+
     users = []
     score = []
-    
+
     for person in all_people:
         #users.append(person.username+' '+ str(person.score) +' '+ str(person.date))
         users.append(person.username)
         score.append(person.score)
-        
-    return [users,score]
+
+    return [users, score]
+
+
 def get_all():
+    '''get all users in db order by score'''
     all_people = models.Person.query.order_by(desc('score')).all()
     return all_people
+
+
 if __name__ == "__main__":
     #db.create_all()
     SOCKETIO.run(
