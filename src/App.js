@@ -177,7 +177,7 @@ function App() {
 
   // Only Palyers can reset the board
   function restart() {
-    if (myArray.includes(socket.id)) {
+    if (myArray[0] === socket.id || myArray[1] === socket.id) {
       board.fill(null);
       socket.emit('newboard', { board });
       // onclick();
@@ -215,10 +215,10 @@ function App() {
     socket.emit('newlogin', { user: newuser });
 
     const newlog = [...myArray];
-    if (myArray.length < 2) {
-      newlog.push(socket.id);
-      updateMyArray(newlog);
-    }
+
+    newlog.push(socket.id);
+    updateMyArray(newlog);
+
     socket.emit('login2', { array: newlog });
 
     const newdic = { ...dic };
@@ -234,6 +234,34 @@ function App() {
     if (email2.length > 0) {
       setshown((prevShown) => !prevShown);
     }
+  }
+
+  function logout() {
+    setshown((prevShown) => !prevShown);
+    const newarr = [...myArray];
+    const idx = newarr.indexOf(socket.id);
+
+    if (user.length > 2) {
+      const newtchat = [...tchat2];
+      newtchat.push(`${user[idx].toString()} logged out ${<p>{user[idx + 1].toString()}</p>} you can play`);
+      updatetchat(newtchat);
+      socket.emit('message', { message: newtchat });
+    }
+    newarr.splice(idx, 1);
+    updateMyArray(newarr);
+    socket.emit('login2', { array: newarr });
+    const user2 = [...user];
+    user2.splice(idx, 1);
+    updateuser(user2);
+    socket.emit('newlogin', { user: user2 });
+    const dic2 = { ...dic };
+    if (dic2.X === user[idx]) { delete dic2.X; } else if (dic2.O === user[idx]) { delete dic2.O; }
+    updatedic(dic2);
+    socket.emit('newdic', { dic: dic2 });
+    board.fill(null);
+    socket.emit('newboard', { board });
+
+    user.fill(null);
   }
 
   function showrank() {
@@ -256,15 +284,20 @@ function App() {
       updaterank(newrank);
     }
   }
-  // <Picker onSelect={addEmoji} />
+
   return (
     <div>
+
       <div className="title">
         <h1> WELCOME TO THE GAME </h1>
+
       </div>
       <div className="user">Users Connected</div>
+
       {!isShown ? (
+
         <div className="login">
+
           <input className="input1" ref={email} type="text" />
 
           <button
@@ -276,6 +309,7 @@ function App() {
             {' '}
             Log in
           </button>
+
         </div>
       ) : null}
       <div className="list">
@@ -285,9 +319,19 @@ function App() {
       </div>
 
       {isShown ? (
+
         <div>
+
+          <audio autoPlay loop>
+            <track track kind="captions" />
+            <source src="https://vgmsite.com/soundtracks/super-mario-64-soundtrack/hzzfwhkapv/02%20Title%20Theme.mp3" />
+          </audio>
+          <div className="logout">
+            <button type="button" onClick={() => { logout(); }}>log out</button>
+          </div>
           <div className="tchat_box">Chat Box!</div>
           <div className="win">{winner(board)}</div>
+
           <div className="tchat">
             <textarea ref={tchat} placeholder="Type message.." />
             <button
@@ -362,6 +406,7 @@ function App() {
           ) : null}
         </div>
       ) : null}
+
     </div>
   );
 }

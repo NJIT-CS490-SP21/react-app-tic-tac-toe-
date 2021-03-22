@@ -30,6 +30,11 @@
   top: 20%;
   left: 35%;
 }
+.logout {
+  position: fixed;
+  top: 20%;
+  left: 43%;
+}
 .tchat_box {
   position: fixed; /* or absolute */
   top: 60%;
@@ -67,7 +72,7 @@
 .reset {
   position: fixed;
   top: 80%;
-  left: 45%;
+  left: 43%;
 }
 
 .win {
