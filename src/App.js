@@ -240,10 +240,19 @@ function App() {
     setshown((prevShown) => !prevShown);
     const newarr = [...myArray];
     const idx = newarr.indexOf(socket.id);
-
-    if (user.length > 2) {
-      const newtchat = [...tchat2];
-      newtchat.push(`${user[idx].toString()} logged out ${<p>{user[idx + 1].toString()}</p>} you can play`);
+    const newtchat = [...tchat2];
+    if (newarr[0] === socket.id || newarr[1] === socket.id) {
+      if (user.length > 2) {
+        newtchat.push(`${user[idx]} logged out ${user[idx + 2]} you can play`);
+        updatetchat(newtchat);
+        socket.emit('message', { message: newtchat });
+      } else {
+        newtchat.push(`${user[idx]} logged out`);
+        updatetchat(newtchat);
+        socket.emit('message', { message: newtchat });
+      }
+    } else {
+      newtchat.push(`${user[idx]} logged out`);
       updatetchat(newtchat);
       socket.emit('message', { message: newtchat });
     }
