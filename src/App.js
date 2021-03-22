@@ -333,7 +333,7 @@ function App() {
 
           <audio autoPlay loop>
             <track track kind="captions" />
-            <source src="https://vgmsite.com/soundtracks/super-mario-64-soundtrack/hzzfwhkapv/02%20Title%20Theme.mp3" />
+            <source src="https://vgmsite.com/soundtracks/dragon-ball-z-bgm/edfqvjsl/01-cha-la%20head-cha-la%20%28tv%20size%29.mp3" />
           </audio>
           <div className="logout">
             <button type="button" onClick={() => { logout(); }}>log out</button>
