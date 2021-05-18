@@ -187,10 +187,10 @@ function App() {
   // update tchat list
   function tchatf() {
     const tchat1 = tchat.current.value;
-
+    const newarr = [...myArray];
     const newtchat = [...tchat2];
-
-    newtchat.push(tchat1);
+    const idx = newarr.indexOf(socket.id);
+    newtchat.push(`${user[idx]} : ${tchat1}`);
     updatetchat(newtchat);
     socket.emit('message', { message: newtchat });
     return (
@@ -331,10 +331,6 @@ function App() {
 
         <div>
 
-          <audio autoPlay loop>
-            <track track kind="captions" />
-            <source src="https://vgmsite.com/soundtracks/dragon-ball-z-bgm/edfqvjsl/01-cha-la%20head-cha-la%20%28tv%20size%29.mp3" />
-          </audio>
           <div className="logout">
             <button type="button" onClick={() => { logout(); }}>log out</button>
           </div>
