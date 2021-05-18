@@ -16,9 +16,12 @@ from sqlalchemy import desc
 
 load_dotenv(find_dotenv())
 APP = Flask(__name__, static_folder='./build/static')
-# Point SQLAlchemy to your Heroku database
-APP.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace(
+  "://", "ql://", 1)
+
+APP.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI 
 # Gets rid of a warning
+
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 DB = SQLAlchemy(APP)
 #DB.create_all()
