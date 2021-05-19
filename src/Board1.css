@@ -1,4 +1,4 @@
-.board {
+.board{
   width: 300px; /* Total horizontal dimensions */
   height: 300px; /* Total vertical dimensions */
   display: grid; /* Enables CSS Grid */
@@ -17,11 +17,12 @@
   left: 35%;
 }
 
-.box {
+
+.box{
   border: 1px solid black; /* Shows the lines in the CSS grid */
   background-color: lightblue;
   text-align: center;
-
+  cursor: pointer;
   font-size: 40px;
   font-weight: bold;
 }
@@ -82,6 +83,14 @@
 
   text-shadow: 2px 2px 5px red;
 }
+
+.title:hover {
+  text-shadow: 2px 2px 5px green;
+  position: fixed;
+  top: 5%;
+  left: 31%;
+  text-decoration: underline overline;
+}
 .title {
   text-shadow: 2px 2px 5px red;
   position: fixed;
@@ -89,9 +98,10 @@
   left: 31%;
   text-decoration: underline overline;
 }
-button {
+
+button:hover {
   cursor: pointer;
-  border-radius: 50%;
+  transform: scale(1.05);
 }
 
 .input1 {
@@ -131,4 +141,24 @@ p1 {
   top: 13%;
   left: 7%;
   padding: 5px 15px;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #55433b;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #78645c;
 }
