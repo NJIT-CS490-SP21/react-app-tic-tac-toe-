@@ -243,16 +243,42 @@ function App() {
     const newtchat = [...tchat2];
     if (newarr[0] === socket.id || newarr[1] === socket.id) {
       if (user.length > 2) {
-        newtchat.push(`${user[idx]} logged out ${user[idx + 2]} you can play`);
+        newtchat.push(
+          <p1>
+            {' '}
+            {user[idx]}
+            {' '}
+            logged out
+            {' '}
+            {user[idx + 2]}
+            {' '}
+            you can play
+            {' '}
+          </p1>,
+        );
         updatetchat(newtchat);
         socket.emit('message', { message: newtchat });
       } else {
-        newtchat.push(`${user[idx]} logged out`);
+        newtchat.push(
+          <p1>
+            {' '}
+            {user[idx]}
+            {' '}
+            logged out
+          </p1>,
+        );
         updatetchat(newtchat);
         socket.emit('message', { message: newtchat });
       }
     } else {
-      newtchat.push(`${user[idx]} logged out`);
+      newtchat.push(
+        <p1>
+          {' '}
+          {user[idx]}
+          {' '}
+          logged out
+        </p1>,
+      );
       updatetchat(newtchat);
       socket.emit('message', { message: newtchat });
     }

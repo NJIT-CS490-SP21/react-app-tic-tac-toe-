@@ -111,6 +111,9 @@ tfoot {
 p {
   text-shadow: 2px 2px 5px green;
 }
+p1 {
+  text-shadow: 2px 2px 5px red;
+}
 .center {
   position: fixed;
   top: 20%;
