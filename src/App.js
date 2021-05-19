@@ -348,7 +348,7 @@ function App() {
               {' '}
               Post
             </button>
-            {tchat2.map((item) => (
+            {tchat2.slice(0).reverse().map((item) => (
               <Tchat value={item} />
             ))}
           </div>
